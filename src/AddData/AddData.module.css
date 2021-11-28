@@ -1,0 +1,69 @@
+.input {
+  margin: 4rem auto;
+  padding: 1rem;
+  /* width: 50rem; */
+  max-width: 50rem;
+}
+
+.input label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.input input {
+  font: inherit;
+  display: block;
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 0.15rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #74c0fc;
+  border-radius: 1rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.input input:focus {
+  outline: none;
+}
+
+input::-webkit-input-placeholder {
+  color: black; /*Change the placeholder color*/
+  opacity: 0.2; /*Change the opacity between 0 and 1*/
+}
+
+.button {
+  font: inherit;
+  border: 1px solid #74c0fc;
+  background: #228be6;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 1rem;
+  text-align: center;
+  margin-top: 0.7rem;
+  margin-right: 2rem;
+}
+
+.button:hover,
+.button:active {
+  background: #1864ab;
+  border-color: #339af0;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

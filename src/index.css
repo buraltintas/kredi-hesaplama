@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Roboto", "sans-serif";
+  background-color: #f1f3f5;
+  font-size: 50%;
+  color: #343a40;
+}
+
+body {
+  font-size: 2.5rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 32em) {
+  html {
+    font-size: 30%;
+  }
+}
