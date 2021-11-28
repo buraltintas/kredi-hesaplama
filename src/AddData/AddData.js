@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AddData.module.css";
 import Card from "../RenderCredit/Card";
-import CurrencyInput from "react-currency-input-field";
 
 const AddData = (props) => {
   const prefix = "₺ ";
