@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import styles from "./AddData.module.css";
 import Card from "../RenderCredit/Card";
+import CurrencyInput from "react-currency-input-field";
 
 const AddData = (props) => {
+  const prefix = "₺ ";
+
   const [enteredCreditAmount, setEnteredCreditAmount] = useState("");
   const [enteredMonths, setEnteredMonths] = useState("");
   const [enteredInterestRate, setEnteredInterestRate] = useState("");
@@ -45,12 +48,16 @@ const AddData = (props) => {
       <form onSubmit={addDataHandler}>
         <label htmlFor="amount">Kredi Tutarı (TL)</label>
         <input
+          value={enteredCreditAmount}
+          prefix={prefix}
           id="amount"
           type="number"
           min="1000"
-          placeholder="10000"
+          placeholder="ör: 10000"
           onChange={creditAmountHandler}
           value={enteredCreditAmount}
+          decimalSeparator=","
+          groupSeparator="."
           required
         />
         <label htmlFor="months">Vade (ay)</label>
@@ -58,7 +65,7 @@ const AddData = (props) => {
           id="months"
           type="number"
           min="1"
-          placeholder="36"
+          placeholder="ör: 36"
           onChange={monthsHandler}
           value={enteredMonths}
           required
@@ -68,7 +75,7 @@ const AddData = (props) => {
           id="interest-rate"
           type="number"
           step="0.01"
-          placeholder="1.65"
+          placeholder="ör: 1.65"
           min="0,01"
           onChange={interestRateHandler}
           value={enteredInterestRate}
@@ -78,7 +85,7 @@ const AddData = (props) => {
         <input
           id="bsmv"
           type="number"
-          placeholder="5"
+          placeholder="ör: 5"
           onChange={bsmvHandler}
           value={enteredBsmv}
           min="0"
@@ -88,7 +95,7 @@ const AddData = (props) => {
         <input
           id="kkdf"
           type="number"
-          placeholder="15"
+          placeholder="ör: 15"
           onChange={kkdfHandler}
           value={enteredKkdf}
           min="0"

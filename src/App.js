@@ -29,19 +29,19 @@ function App() {
         <Card className={styles.creditRender}>
           {creditData.map((item) => (
             <div key={item.id}>
-              <h2>Kredi tutarı</h2>
-              <h3>
+              <h3>Kredi tutarı</h3>
+              <h2>
                 {item.creditAmount.toLocaleString("tr-TR", {
                   style: "currency",
                   currency: "TRY",
                 })}
-              </h3>
-              <h2>Kredi vadesi</h2>
-              <h3>{item.creditMonths} ay</h3>
-              <h2>Kredi faiz oranı</h2>
-              <h3>%{item.creditRate}</h3>
-              <h2>Taksit tutarı</h2>
-              <h3>
+              </h2>
+              <h3>Kredi vadesi</h3>
+              <h2>{item.creditMonths} ay</h2>
+              <h3>Kredi faiz oranı</h3>
+              <h2>%{item.creditRate}</h2>
+              <h3>Taksit tutarı</h3>
+              <h2>
                 {parseFloat(
                   (item.creditAmount *
                     ((item.creditRate / 100) *
@@ -60,9 +60,9 @@ function App() {
                   style: "currency",
                   currency: "TRY",
                 })}
-              </h3>
-              <h2>Toplam geri ödeme</h2>
-              <h3>
+              </h2>
+              <h3>Toplam geri ödeme</h3>
+              <h2>
                 {parseFloat(
                   (item.creditMonths *
                     (item.creditAmount *
@@ -82,7 +82,7 @@ function App() {
                   style: "currency",
                   currency: "TRY",
                 })}
-              </h3>
+              </h2>
             </div>
           ))}
         </Card>
