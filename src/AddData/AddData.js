@@ -69,7 +69,7 @@ const AddData = (props) => {
           type="number"
           step="0.01"
           placeholder="1.65"
-          min="0.01"
+          min="0"
           onChange={interestRateHandler}
           value={enteredInterestRate}
           required
