@@ -54,9 +54,6 @@ const AddData = (props) => {
           min="1000"
           placeholder="ör: 10000"
           onChange={creditAmountHandler}
-          value={enteredCreditAmount}
-          decimalSeparator=","
-          groupSeparator="."
           required
         />
         <label htmlFor="months">Vade (ay)</label>
