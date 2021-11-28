@@ -18,4 +18,8 @@ body {
   html {
     font-size: 30%;
   }
+  body {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
 }

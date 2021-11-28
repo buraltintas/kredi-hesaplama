@@ -9,7 +9,6 @@ function App() {
 
   const addDataHandler = (amount, months, rate, bsmv, kkdf) => {
     setCreditData(() => {
-      console.log(amount, months, rate, bsmv, kkdf);
       return [
         {
           creditAmount: +amount,
