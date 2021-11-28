@@ -81,6 +81,7 @@ const AddData = (props) => {
           placeholder="5"
           onChange={bsmvHandler}
           value={enteredBsmv}
+          min="0"
           required
         />
         <label htmlFor="kkdf">KKDF Oranı (%)</label>
@@ -90,6 +91,7 @@ const AddData = (props) => {
           placeholder="15"
           onChange={kkdfHandler}
           value={enteredKkdf}
+          min="0"
           required
         />
         <div className={styles.btn}>

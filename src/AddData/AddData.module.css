@@ -35,7 +35,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 input::-webkit-input-placeholder {
-  color: black; /*Change the placeholder color*/
+  color: #343a40; /*Change the placeholder color*/
   opacity: 0.2; /*Change the opacity between 0 and 1*/
 }
 
