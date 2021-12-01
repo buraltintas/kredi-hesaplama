@@ -21,6 +21,7 @@
   margin-bottom: 0.5rem;
   border: 1px solid #74c0fc;
   border-radius: 1rem;
+  text-indent: 1rem;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
