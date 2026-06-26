@@ -17,6 +17,18 @@
   gap: 14px;
 }
 
+.socialLinks a {
+  color: #767676;
+  display: inline-flex;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.socialLinks a:hover,
+.socialLinks a:focus-visible {
+  color: #0877e8;
+}
+
 .copyright {
   color: #607083;
   font-size: 13px;

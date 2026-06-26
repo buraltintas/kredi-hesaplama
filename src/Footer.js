@@ -3,25 +3,38 @@ import styles from "./Footer.module.css";
 import "./Footer-logo.css";
 
 const Footer = () => {
+  const externalLinkProps = {
+    rel: "noopener noreferrer",
+    target: "_blank",
+  };
+
   return (
     <footer className={styles.footer}>
       <div className={styles.socialLinks}>
-        <a href="https://www.instagram.com/xewor/" aria-label="Instagram">
+        <a href="https://burak-altintas.com" aria-label="Burak Altıntaş web sitesi" {...externalLinkProps}>
+          <ion-icon className="social-icon" name="globe-outline"></ion-icon>
+        </a>
+        <a href="https://www.instagram.com/xewor/" aria-label="Instagram" {...externalLinkProps}>
           <ion-icon className="social-icon" name="logo-instagram"></ion-icon>
         </a>
-        <a href="https://www.facebook.com/profile.php?id=616346676" aria-label="Facebook">
+        <a
+          href="https://www.facebook.com/profile.php?id=616346676"
+          aria-label="Facebook"
+          {...externalLinkProps}
+        >
           <ion-icon className="social-icon" name="logo-facebook"></ion-icon>
         </a>
-        <a href="https://twitter.com/burak_alti" aria-label="Twitter">
+        <a href="https://twitter.com/burak_alti" aria-label="Twitter" {...externalLinkProps}>
           <ion-icon className="social-icon" name="logo-twitter"></ion-icon>
         </a>
         <a
           href="https://www.linkedin.com/in/burak-alt%C4%B1nta%C5%9F-8b796b1b8/"
           aria-label="LinkedIn"
+          {...externalLinkProps}
         >
           <ion-icon className="social-icon" name="logo-linkedin"></ion-icon>
         </a>
-        <a href="https://github.com/buraltintas" aria-label="GitHub">
+        <a href="https://github.com/buraltintas" aria-label="GitHub" {...externalLinkProps}>
           <ion-icon className="social-icon" name="logo-github"></ion-icon>
         </a>
       </div>
