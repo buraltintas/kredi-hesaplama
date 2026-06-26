@@ -3,23 +3,22 @@
 }
 
 html {
-  font-family: "Roboto", "sans-serif";
-  background-color: #f1f3f5;
-  font-size: 50%;
-  color: #343a40;
+  background: #f3f6fa;
+  color: #14213d;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Arial, sans-serif;
 }
 
 body {
-  font-size: 2.5rem;
-  margin: 0 auto;
+  margin: 0;
+  min-width: 320px;
 }
 
-@media (max-width: 32em) {
-  html {
-    font-size: 30%;
-  }
-  body {
-    margin-left: 2rem;
-    margin-right: 2rem;
-  }
+button,
+input {
+  font-family: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
 }

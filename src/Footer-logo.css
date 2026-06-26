@@ -1,6 +1,6 @@
 .social-icon {
-  height: 2.4rem;
-  width: 2.4rem;
+  display: block;
+  height: 22px;
+  width: 22px;
   color: #767676;
-  margin-right: 1rem;
 }

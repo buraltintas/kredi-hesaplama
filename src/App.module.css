@@ -1,6 +1,587 @@
-.creditRender {
-  margin: 4rem auto;
-  padding: 1rem;
-  /* width: 50rem; */
-  max-width: 50rem;
+.appShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f3f6fa;
+}
+
+.page {
+  flex: 1;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 36px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.header span {
+  display: block;
+  color: #0877e8;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 2px 0 0;
+  color: #14213d;
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+.header p {
+  max-width: 520px;
+  margin: 0;
+  color: #607083;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.formStack,
+.resultStack {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.resultColumn {
+  min-width: 0;
+  position: sticky;
+  top: 16px;
+}
+
+.card,
+.resultCard,
+.scheduleCard,
+.emptyState {
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(20, 33, 61, 0.08);
+}
+
+.card,
+.resultCard,
+.scheduleCard,
+.emptyState {
+  padding: 18px;
+  min-width: 0;
+}
+
+.card h2,
+.inlineHeader h3 {
+  margin: 0;
+  color: #14213d;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.field span {
+  color: #14213d;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.field input,
+.field button,
+.segmentGroup button,
+.planGrid button {
+  font: inherit;
+}
+
+.field input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #14213d;
+  font-size: 16px;
+  font-weight: 700;
+  outline: none;
+  padding: 0 14px;
+}
+
+.field input:disabled {
+  color: #607083;
+  background: #f8fafc;
+}
+
+.field input:focus {
+  border-color: #0877e8;
+  box-shadow: 0 0 0 3px rgba(8, 119, 232, 0.13);
+}
+
+.field input::placeholder {
+  color: #8a97a8;
+  font-weight: 600;
+  opacity: 0.48;
+}
+
+.twoColumn {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.segmentGroup,
+.planGrid {
+  display: grid;
+  gap: 8px;
+}
+
+.segmentGroup {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.planGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.segmentGroup button,
+.planGrid button,
+.inlineHeader button,
+.recentActions button,
+.iconButton {
+  min-height: 42px;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #14213d;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 9px 10px;
+}
+
+.segmentGroup button:not(.segmentSelected):hover,
+.planGrid button:not(.segmentSelected):hover,
+.inlineHeader button:hover,
+.recentActions button:hover {
+  border-color: #0877e8;
+}
+
+.segmentGroup .segmentSelected,
+.planGrid .segmentSelected {
+  border-color: #0877e8;
+  background: #e7f5ff;
+  color: #083d77;
+}
+
+.customPayments {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.inlineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.customPaymentRow {
+  display: grid;
+  grid-template-columns: 0.8fr 1.15fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.iconButton {
+  min-width: 54px;
+  margin-bottom: 0;
+}
+
+.iconButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.contactToggle,
+.recentToggle,
+.scheduleToggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  text-align: left;
+}
+
+.contactToggle span,
+.recentToggle span,
+.scheduleToggle span {
+  display: grid;
+  gap: 4px;
+}
+
+.contactToggle strong,
+.recentToggle strong,
+.scheduleToggle strong {
+  color: #14213d;
+  font-size: 18px;
+}
+
+.contactToggle small,
+.recentToggle small,
+.scheduleToggle small {
+  color: #607083;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.contactToggle b,
+.recentToggle b,
+.scheduleToggle b {
+  flex: 0 0 auto;
+  border-radius: 8px;
+  background: #e7f5ff;
+  color: #083d77;
+  font-size: 13px;
+  padding: 8px 10px;
+}
+
+.recentList {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.recentItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 12px;
+}
+
+.recentItem div:first-child {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.recentItem strong {
+  color: #14213d;
+  font-size: 14px;
+}
+
+.recentItem span,
+.recentItem small {
+  color: #607083;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.recentActions {
+  display: grid;
+  gap: 8px;
+  align-content: center;
+}
+
+.errorBox {
+  border: 1px solid #ffc9c9;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #c92a2a;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+  padding: 14px;
+}
+
+.calculateButton,
+.pdfButton {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.calculateButton {
+  background: #0877e8;
+  box-shadow: 0 10px 18px rgba(8, 119, 232, 0.22);
+}
+
+.pdfButton {
+  margin-top: 4px;
+  background: #0f8f5f;
+}
+
+.emptyState {
+  display: grid;
+  gap: 8px;
+  color: #607083;
+}
+
+.emptyState strong {
+  color: #14213d;
+  font-size: 18px;
+}
+
+.emptyState span {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.heroResult {
+  display: grid;
+  gap: 8px;
+  border-radius: 8px;
+  background: #083d77;
+  color: #ffffff;
+  padding: 18px;
+}
+
+.heroResult span,
+.heroResult small {
+  color: #dceaf7;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.heroResult strong {
+  color: #ffffff;
+  font-size: 29px;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.metric {
+  display: grid;
+  gap: 5px;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 12px;
+  min-width: 0;
+}
+
+.metric span {
+  color: #607083;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.metric strong {
+  color: #14213d;
+  font-size: 15px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.metricHighlighted {
+  background: #e7f5ff;
+}
+
+.metricHighlighted span {
+  color: #0877e8;
+}
+
+.dateStrip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+  margin-top: 14px;
+  padding: 12px;
+}
+
+.dateStrip div {
+  display: grid;
+  gap: 4px;
+}
+
+.dateStrip span {
+  color: #607083;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dateStrip strong {
+  color: #14213d;
+  font-size: 15px;
+}
+
+.noteBox {
+  display: grid;
+  gap: 6px;
+  border: 1px solid #ffe8a3;
+  border-radius: 8px;
+  background: #fff8e8;
+  color: #14213d;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.noteBox strong {
+  color: #b86200;
+  font-size: 13px;
+}
+
+.noteBox span {
+  white-space: pre-line;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.tableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 14px;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scheduleTable {
+  width: max-content;
+  min-width: 920px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.scheduleTable th {
+  background: #083d77;
+  color: #ffffff;
+  text-align: left;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border-bottom: 1px solid #e6ecf2;
+  padding: 9px 8px;
+  white-space: nowrap;
+}
+
+.scheduleTable th:nth-child(1),
+.scheduleTable td:nth-child(1) {
+  min-width: 42px;
+}
+
+.scheduleTable th:nth-child(2),
+.scheduleTable td:nth-child(2) {
+  min-width: 100px;
+}
+
+.scheduleTable th:nth-child(n + 3),
+.scheduleTable td:nth-child(n + 3) {
+  min-width: 124px;
+}
+
+.scheduleTable td {
+  color: #14213d;
+  font-weight: 700;
+}
+
+.scheduleTable em {
+  display: block;
+  color: #0877e8;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+@media (max-width: 980px) {
+  .header {
+    align-items: flex-start;
+    display: grid;
+  }
+
+  .header p {
+    max-width: none;
+    text-align: left;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .resultColumn {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    width: min(100% - 20px, 1180px);
+    padding-top: 16px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .card,
+  .resultCard,
+  .scheduleCard,
+  .emptyState {
+    padding: 14px;
+  }
+
+  .twoColumn,
+  .segmentGroup,
+  .planGrid,
+  .customPaymentRow,
+  .recentItem,
+  .metricsGrid,
+  .dateStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .customPaymentRow {
+    align-items: stretch;
+  }
+
+  .heroResult strong {
+    font-size: 23px;
+  }
+
+  .contactToggle,
+  .recentToggle,
+  .scheduleToggle {
+    align-items: flex-start;
+  }
 }
