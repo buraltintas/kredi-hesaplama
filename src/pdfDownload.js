@@ -323,7 +323,7 @@ export const downloadLoanPdf = async (result, contactInfo) => {
 
   doc.setProperties({
     title: "Kredi Ödeme Planı",
-    subject: "Bankacı Kredi Hesaplama",
+    subject: "Bankacı: Kredi Hesaplama",
   });
 
   let y = drawHeader(doc);

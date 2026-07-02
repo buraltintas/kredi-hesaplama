@@ -1,8 +1,8 @@
-# Bankacı Kredi Hesaplama
+# Bankacı: Kredi Hesaplama
 
-Bankacı Kredi Hesaplama, kredi tutarı, vade, aylık faiz oranı, KKDF/BSMV ve ödeme planı tipine göre detaylı geri ödeme planı oluşturan Türkçe bir React web uygulamasıdır.
+Bankacı: Kredi Hesaplama, kredi tutarı, vade, aylık faiz oranı, KKDF/BSMV ve ödeme planı tipine göre detaylı geri ödeme planı oluşturan Türkçe bir React web uygulamasıdır.
 
-Canlı adres: https://kredi-hesaplama.netlify.app/
+Canlı adres: https://bankaci.burak-altintas.com/
 
 ## Özellikler
 
@@ -13,10 +13,13 @@ Canlı adres: https://kredi-hesaplama.netlify.app/
 - Anapara ödemesiz dönemli plan
 - Artan taksitli plan
 - Kredi kullanım tarihi ve ilk taksit tarihine göre kırık dönem farkı
+- İlk taksit ertelemesini vadeden düşme seçeneği
+- Artan taksitli planlarda artış başlangıç ve bitiş taksiti belirleme
 - Detaylı ödeme planı / amortisman tablosu
-- PDF ödeme planı indirme
+- Türkçe karakter destekli PDF ödeme planı indirme
 - İsteğe bağlı PDF iletişim bilgisi
 - Son 20 hesaplamayı tarayıcıda saklama
+- Uygulama hakkında bilgi modalı
 - Mobil, tablet ve masaüstü için responsive arayüz
 
 ## Kurulum
@@ -46,4 +49,4 @@ Build çıktısı `build/` klasörüne üretilir.
 - React 17 ve Create React App 4 kullanır.
 - PDF çıktıları `jspdf` ve `jspdf-autotable` ile üretilir.
 - Türkçe karakter desteği için PDF içinde uygulama fontu gömülür.
-- Node 20/OpenSSL uyumluluğu için `start` ve `build` scriptlerinde `NODE_OPTIONS=--openssl-legacy-provider` kullanılır.
+- Create React App 4 uyumluluğu için Node sürümü `.nvmrc` ile sabitlenir.

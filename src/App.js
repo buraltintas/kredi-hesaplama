@@ -23,6 +23,7 @@ import {
 
 const RECENT_CALCULATIONS_KEY = "bankaci-web-recent-calculations";
 const CONTACT_PREFS_KEY = "bankaci-web-pdf-contact";
+const DEDUCT_FIRST_INSTALLMENT_DELAY_KEY = "bankaci-web-deduct-first-installment-delay";
 const today = startOfLocalDay(new Date());
 
 const createCustomPaymentRow = () => ({
@@ -59,6 +60,9 @@ const getInitialContactPrefs = () =>
     phone: "",
   });
 
+const getInitialDeductFirstInstallmentDelay = () =>
+  readJson(DEDUCT_FIRST_INSTALLMENT_DELAY_KEY, true) === true;
+
 function App() {
   const contactPrefs = useMemo(getInitialContactPrefs, []);
   const [loanType, setLoanType] = useState("Bireysel İhtiyaç/Taşıt Kredisi");
@@ -79,7 +83,7 @@ function App() {
   const [creditUsageDate, setCreditUsageDate] = useState(today);
   const [firstInstallmentDate, setFirstInstallmentDate] = useState(addMonths(today, 1));
   const [deductFirstInstallmentDelayFromTerm, setDeductFirstInstallmentDelayFromTerm] =
-    useState(false);
+    useState(getInitialDeductFirstInstallmentDelay);
   const [includeContactInfo, setIncludeContactInfo] = useState(
     contactPrefs.includeContactInfo
   );
@@ -100,6 +104,14 @@ function App() {
 
   const saveContactPrefs = (next) => {
     window.localStorage.setItem(CONTACT_PREFS_KEY, JSON.stringify(next));
+  };
+
+  const updateDeductFirstInstallmentDelayFromTerm = (nextValue) => {
+    setDeductFirstInstallmentDelayFromTerm(nextValue);
+    window.localStorage.setItem(
+      DEDUCT_FIRST_INSTALLMENT_DELAY_KEY,
+      JSON.stringify(nextValue)
+    );
   };
 
   const updateRecentCalculations = (form, nextResult) => {
@@ -178,7 +190,7 @@ function App() {
     );
     setInstallmentIncreaseStartNo(formSnapshot.installmentIncreaseStartNo ?? "1");
     setInstallmentIncreaseEndNo(formSnapshot.installmentIncreaseEndNo ?? "");
-    setDeductFirstInstallmentDelayFromTerm(
+    updateDeductFirstInstallmentDelayFromTerm(
       formSnapshot.deductFirstInstallmentDelayFromTerm === true
     );
     setCustomPaymentRows(
@@ -836,7 +848,9 @@ function App() {
                 className={styles.contactToggle}
                 type="button"
                 onClick={() => {
-                  setDeductFirstInstallmentDelayFromTerm((value) => !value);
+                  updateDeductFirstInstallmentDelayFromTerm(
+                    !deductFirstInstallmentDelayFromTerm
+                  );
                   clearResult();
                 }}
               >
