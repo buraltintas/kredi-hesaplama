@@ -98,7 +98,6 @@ const getSummaryRows = (result) => {
 
   if (result.planType === "customPayment") {
     rows.push(
-      ["Otomatik taksit", formatCurrency(result.automaticInstallmentAmount ?? 0)],
       ["Özel ödeme sayısı", `${result.input.customPayments?.length ?? 0}`],
       ["Son taksit", formatCurrency(result.lastInstallmentAmount ?? 0)]
     );
@@ -117,6 +116,8 @@ const getSummaryRows = (result) => {
     rows.push(
       ["Taksit artış oranı", formatPercent(result.installmentIncreaseRatePercent ?? 0)],
       ["Artış sıklığı", `${result.installmentIncreaseFrequencyMonths ?? 12} ay`],
+      ["Artış başlangıç taksiti", `${result.installmentIncreaseStartNo ?? 1}. taksit`],
+      ["Artış bitiş taksiti", `${result.installmentIncreaseEndNo ?? result.input.term}. taksit`],
       ["İlk taksit", formatCurrency(result.firstInstallmentAmount ?? result.firstInstallment)],
       ["İlk artış sonrası taksit", formatCurrency(getFirstIncreasedInstallmentAmount(result))],
       ["Son taksit", formatCurrency(result.lastInstallmentAmount ?? 0)]
@@ -124,6 +125,9 @@ const getSummaryRows = (result) => {
   }
 
   rows.push(
+    ...(result.deductedDelayMonths > 0
+      ? [["Ödeme planı taksit sayısı", `${result.effectiveInstallmentCount} ay`]]
+      : []),
     ["İlk taksit tutarı", formatCurrency(result.firstInstallment)],
     ["Toplam ödeme", formatCurrency(result.totalPayment)],
     ["Toplam faiz / KKDF / BSMV", `${formatCurrency(result.totalInterest)} / ${formatCurrency(result.totalKkdf)} / ${formatCurrency(result.totalBsmv)}`]
@@ -337,6 +341,20 @@ export const downloadLoanPdf = async (result, contactInfo) => {
   const interestOnlyInfo = getInterestOnlyEffectiveInstallmentInfo(result);
   if (interestOnlyInfo) {
     y = drawNotice(doc, "Taksit sayısı bilgilendirmesi", interestOnlyInfo, y);
+  }
+
+  if (result.infoMessages?.length) {
+    y = drawNotice(
+      doc,
+      "Taksit sayısı bilgilendirmesi",
+      result.infoMessages.join("\n"),
+      y,
+      {
+        accentColor: [37, 99, 235],
+        borderColor: [191, 219, 254],
+        fillColor: [239, 246, 255],
+      }
+    );
   }
 
   if (result.planType === "customPayment" && result.input.customPayments?.length) {

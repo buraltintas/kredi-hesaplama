@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import styles from "./App.module.css";
+import NumberInput from "./components/NumberInput";
+import ResultPanel from "./components/ResultPanel";
 import Footer from "./Footer";
 import { downloadLoanPdf } from "./pdfDownload";
 import {
@@ -9,19 +11,13 @@ import {
   buildCustomPaymentsFromRows,
   calculateLoan,
   formatCurrency,
-  formatCustomPaymentsSummary,
-  formatDate,
   formatDateForInput,
-  formatPercent,
-  getFirstIncreasedInstallmentAmount,
-  getInterestOnlyEffectiveInstallmentInfo,
-  getInterestOnlyPeriodInstallmentAmount,
   parseInputDate,
+  parseInstallmentIncreaseBoundary,
   parseInstallmentIncreaseFrequencyMonths,
   parseInstallmentIncreaseRatePercent,
   parseInterestOnlyInstallmentCount,
   parseNumericInput,
-  sanitizeNumericInput,
   startOfLocalDay,
 } from "./loanEngine";
 
@@ -63,254 +59,6 @@ const getInitialContactPrefs = () =>
     phone: "",
   });
 
-const NumberInput = ({
-  label,
-  mode = "decimal",
-  value,
-  onChange,
-  placeholder,
-  disabled = false,
-}) => (
-  <label className={styles.field}>
-    <span>{label}</span>
-    <input
-      value={value}
-      inputMode={mode === "integer" ? "numeric" : "decimal"}
-      disabled={disabled}
-      placeholder={placeholder}
-      onChange={(event) => onChange(sanitizeNumericInput(event.target.value, mode))}
-    />
-  </label>
-);
-
-const Metric = ({ label, value, highlighted = false }) => (
-  <div className={`${styles.metric} ${highlighted ? styles.metricHighlighted : ""}`}>
-    <span>{label}</span>
-    <strong>{value}</strong>
-  </div>
-);
-
-const getHeroContent = (result) => {
-  const isCustomPayment = result.planType === "customPayment";
-  const isIncreasingInstallment = result.planType === "increasingInstallment";
-  const isInterestOnly = result.planType === "interestOnly";
-  const isEqualPrincipal = result.planType === "equalPrincipal";
-
-  if (isCustomPayment) {
-    return {
-      label: "Otomatik Taksit",
-      value: formatCurrency(result.automaticInstallmentAmount ?? 0),
-      subValue: `${result.input.customPayments?.length ?? 0} özel ödeme`,
-    };
-  }
-
-  if (isIncreasingInstallment) {
-    return {
-      label: "İlk Taksit / Son Taksit",
-      value: `${formatCurrency(
-        result.firstInstallmentAmount ?? result.firstInstallment
-      )} / ${formatCurrency(result.lastInstallmentAmount ?? result.firstInstallment)}`,
-      subValue: `Her ${
-        result.installmentIncreaseFrequencyMonths ?? 12
-      } ayda bir %${result.installmentIncreaseRatePercent ?? 0} artış`,
-    };
-  }
-
-  if (isInterestOnly) {
-    return {
-      label: "Sonraki Dönem Taksiti",
-      value: formatCurrency(result.postInterestOnlyInstallmentAmount ?? 0),
-      subValue: `${result.interestOnlyInstallmentCount ?? 0} anapara ödemesiz taksit`,
-    };
-  }
-
-  if (isEqualPrincipal) {
-    return {
-      label: "İlk Taksit / Son Taksit",
-      value: `${formatCurrency(
-        result.firstInstallmentAmount ?? result.firstInstallment
-      )} / ${formatCurrency(result.lastInstallmentAmount ?? result.firstInstallment)}`,
-      subValue: `Aylık anapara ${formatCurrency(result.monthlyPrincipalAmount ?? 0)}`,
-    };
-  }
-
-  return {
-    label: "Aylık Taksit",
-    value: formatCurrency(result.standardInstallment),
-    subValue: `İlk taksit ${formatCurrency(result.firstInstallment)}`,
-  };
-};
-
-const ResultPanel = ({ result, onDownloadPdf, isScheduleOpen, onToggleSchedule }) => {
-  const hero = getHeroContent(result);
-  const hasBrokenPeriod = result.brokenPeriod.diffDays !== 0;
-  const isPrepaidInterest = result.planType === "prepaidInterest";
-  const isEqualPrincipal = result.planType === "equalPrincipal";
-  const isCustomPayment = result.planType === "customPayment";
-  const isInterestOnly = result.planType === "interestOnly";
-  const isIncreasingInstallment = result.planType === "increasingInstallment";
-  const interestOnlyInfo = getInterestOnlyEffectiveInstallmentInfo(result);
-
-  return (
-    <section className={styles.resultStack}>
-      <div className={styles.resultCard}>
-        <div className={styles.heroResult}>
-          <span>{hero.label}</span>
-          <strong>{hero.value}</strong>
-          <small>{hero.subValue}</small>
-        </div>
-
-        <div className={styles.metricsGrid}>
-          <Metric label="Kredi Tutarı" value={formatCurrency(result.input.principal)} highlighted />
-          <Metric label="Vade" value={`${result.input.term} ay`} />
-          {result.planType !== "standard" ? (
-            <Metric label="Plan Tipi" value={PLAN_TYPE_LABELS[result.planType]} />
-          ) : null}
-          <Metric
-            label={isPrepaidInterest ? "Baz Aylık Faiz Oranı" : "Aylık Faiz Oranı"}
-            value={formatPercent(result.input.monthlyInterestRatePercent)}
-          />
-          {isPrepaidInterest ? (
-            <>
-              <Metric
-                label="İndirimli Faiz Oranı"
-                value={formatPercent((result.discountedMonthlyRate ?? 0) * 100, 3, 3)}
-              />
-              <Metric
-                label="0. Taksit Peşin Faiz"
-                value={formatCurrency(result.realizedPrepaidInterest ?? 0)}
-              />
-            </>
-          ) : null}
-          {isEqualPrincipal ? (
-            <>
-              <Metric label="Aylık Anapara" value={formatCurrency(result.monthlyPrincipalAmount ?? 0)} />
-              <Metric label="İlk Taksit" value={formatCurrency(result.firstInstallmentAmount ?? 0)} />
-              <Metric label="Son Taksit" value={formatCurrency(result.lastInstallmentAmount ?? 0)} />
-            </>
-          ) : null}
-          {isCustomPayment ? (
-            <>
-              <Metric label="Otomatik Taksit" value={formatCurrency(result.automaticInstallmentAmount ?? 0)} />
-              <Metric label="Özel Ödeme Sayısı" value={`${result.input.customPayments?.length ?? 0}`} />
-              <Metric label="Son Taksit" value={formatCurrency(result.lastInstallmentAmount ?? 0)} />
-            </>
-          ) : null}
-          {isInterestOnly ? (
-            <>
-              <Metric label="Anapara Ödemesiz Taksit Sayısı" value={`${result.interestOnlyInstallmentCount ?? 0}`} />
-              <Metric label="Anapara Ödemesiz Dönem Taksiti" value={formatCurrency(getInterestOnlyPeriodInstallmentAmount(result))} />
-              <Metric label="Sonraki Dönem Taksiti" value={formatCurrency(result.postInterestOnlyInstallmentAmount ?? 0)} />
-              <Metric label="Son Taksit" value={formatCurrency(result.lastInstallmentAmount ?? 0)} />
-            </>
-          ) : null}
-          {isIncreasingInstallment ? (
-            <>
-              <Metric label="Taksit Artış Oranı" value={formatPercent(result.installmentIncreaseRatePercent ?? 0)} />
-              <Metric label="Artış Sıklığı" value={`${result.installmentIncreaseFrequencyMonths ?? 12} ay`} />
-              <Metric label="İlk Taksit" value={formatCurrency(result.firstInstallmentAmount ?? result.firstInstallment)} />
-              <Metric label="İlk Artış Sonrası Taksit" value={formatCurrency(getFirstIncreasedInstallmentAmount(result))} />
-              <Metric label="Son Taksit" value={formatCurrency(result.lastInstallmentAmount ?? 0)} />
-            </>
-          ) : null}
-          <Metric label="Toplam Faiz" value={formatCurrency(result.totalInterest)} />
-          <Metric label="Toplam BSMV" value={formatCurrency(result.totalBsmv)} />
-          <Metric label="Toplam KKDF" value={formatCurrency(result.totalKkdf)} />
-          <Metric label="Toplam Ödeme" value={formatCurrency(result.totalPayment)} />
-        </div>
-
-        <div className={styles.dateStrip}>
-          <div>
-            <span>Kullanım</span>
-            <strong>{formatDate(result.input.creditUsageDate)}</strong>
-          </div>
-          <div>
-            <span>İlk Taksit</span>
-            <strong>{formatDate(result.input.firstInstallmentDate)}</strong>
-          </div>
-        </div>
-
-        {hasBrokenPeriod ? (
-          <div className={styles.noteBox}>
-            <strong>Kırık dönem farkı sadece 1. taksite yansıtıldı.</strong>
-            <span>
-              Gün farkı {result.brokenPeriod.diffDays}; faiz{" "}
-              {formatCurrency(result.brokenPeriod.interestDiff)}, KKDF{" "}
-              {formatCurrency(result.brokenPeriod.kkdfDiff)}, BSMV{" "}
-              {formatCurrency(result.brokenPeriod.bsmvDiff)}.
-            </span>
-          </div>
-        ) : null}
-
-        {interestOnlyInfo ? (
-          <div className={styles.noteBox}>
-            <strong>Taksit sayısı bilgilendirmesi</strong>
-            <span>{interestOnlyInfo}</span>
-          </div>
-        ) : null}
-
-        {isCustomPayment && result.input.customPayments?.length ? (
-          <div className={styles.noteBox}>
-            <strong>Özel Ödemeler</strong>
-            <span>{formatCustomPaymentsSummary(result.input.customPayments)}</span>
-          </div>
-        ) : null}
-
-        <button className={styles.pdfButton} type="button" onClick={onDownloadPdf}>
-          PDF İndir
-        </button>
-      </div>
-
-      <div className={styles.scheduleCard}>
-        <button className={styles.scheduleToggle} type="button" onClick={onToggleSchedule}>
-          <span>
-            <strong>Ödeme Planı</strong>
-            <small>{result.schedule.length} taksit detaylı amortisman tablosu</small>
-          </span>
-          <b>{isScheduleOpen ? "Kapat" : "Aç"}</b>
-        </button>
-
-        {isScheduleOpen ? (
-          <div className={styles.tableWrap}>
-            <table className={styles.scheduleTable}>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tarih</th>
-                  <th>Anapara</th>
-                  <th>Faiz</th>
-                  <th>KKDF</th>
-                  <th>BSMV</th>
-                  <th>Taksit</th>
-                  <th>Kalan</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.schedule.map((item) => (
-                  <tr key={`${item.installmentNumber}-${item.date.toISOString()}`}>
-                    <td>
-                      {item.isPrepaidInterest ? "0. Peşin" : `${item.installmentNumber}.`}
-                      {item.isCustomPayment ? <em>Özel</em> : null}
-                      {item.isInterestOnly ? <em>Anapara Ödemesiz</em> : null}
-                    </td>
-                    <td>{formatDate(item.date)}</td>
-                    <td>{formatCurrency(item.principal)}</td>
-                    <td>{formatCurrency(item.interest)}</td>
-                    <td>{formatCurrency(item.kkdf)}</td>
-                    <td>{formatCurrency(item.bsmv)}</td>
-                    <td>{formatCurrency(item.installment)}</td>
-                    <td>{formatCurrency(item.remainingPrincipal)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : null}
-      </div>
-    </section>
-  );
-};
-
 function App() {
   const contactPrefs = useMemo(getInitialContactPrefs, []);
   const [loanType, setLoanType] = useState("Bireysel İhtiyaç/Taşıt Kredisi");
@@ -325,9 +73,13 @@ function App() {
   const [installmentIncreaseRatePercent, setInstallmentIncreaseRatePercent] = useState("");
   const [installmentIncreaseFrequencyMonths, setInstallmentIncreaseFrequencyMonths] =
     useState("12");
+  const [installmentIncreaseStartNo, setInstallmentIncreaseStartNo] = useState("1");
+  const [installmentIncreaseEndNo, setInstallmentIncreaseEndNo] = useState("");
   const [customPaymentRows, setCustomPaymentRows] = useState([createCustomPaymentRow()]);
   const [creditUsageDate, setCreditUsageDate] = useState(today);
   const [firstInstallmentDate, setFirstInstallmentDate] = useState(addMonths(today, 1));
+  const [deductFirstInstallmentDelayFromTerm, setDeductFirstInstallmentDelayFromTerm] =
+    useState(false);
   const [includeContactInfo, setIncludeContactInfo] = useState(
     contactPrefs.includeContactInfo
   );
@@ -359,10 +111,15 @@ function App() {
       firstInstallmentAmount: nextResult.firstInstallmentAmount,
       lastInstallmentAmount: nextResult.lastInstallmentAmount,
       automaticInstallmentAmount: nextResult.automaticInstallmentAmount,
+      customPaymentCount: nextResult.input.customPayments?.length,
       postInterestOnlyInstallmentAmount: nextResult.postInterestOnlyInstallmentAmount,
       interestOnlyInstallmentCount: nextResult.interestOnlyInstallmentCount,
       installmentIncreaseRatePercent: nextResult.installmentIncreaseRatePercent,
       installmentIncreaseFrequencyMonths: nextResult.installmentIncreaseFrequencyMonths,
+      installmentIncreaseStartNo: nextResult.installmentIncreaseStartNo,
+      installmentIncreaseEndNo: nextResult.installmentIncreaseEndNo,
+      deductFirstInstallmentDelayFromTerm: nextResult.deductFirstInstallmentDelayFromTerm,
+      deductedDelayMonths: nextResult.deductedDelayMonths,
       realizedPrepaidInterest: nextResult.realizedPrepaidInterest,
     };
     const record = {
@@ -393,6 +150,9 @@ function App() {
     interestOnlyInstallmentCount,
     installmentIncreaseRatePercent,
     installmentIncreaseFrequencyMonths,
+    installmentIncreaseStartNo,
+    installmentIncreaseEndNo,
+    deductFirstInstallmentDelayFromTerm,
     customPayments: customPaymentRows.map(({ installmentNo, amount: paymentAmount }) => ({
       installmentNo,
       amount: paymentAmount,
@@ -414,6 +174,11 @@ function App() {
     setInstallmentIncreaseRatePercent(formSnapshot.installmentIncreaseRatePercent ?? "");
     setInstallmentIncreaseFrequencyMonths(
       formSnapshot.installmentIncreaseFrequencyMonths ?? "12"
+    );
+    setInstallmentIncreaseStartNo(formSnapshot.installmentIncreaseStartNo ?? "1");
+    setInstallmentIncreaseEndNo(formSnapshot.installmentIncreaseEndNo ?? "");
+    setDeductFirstInstallmentDelayFromTerm(
+      formSnapshot.deductFirstInstallmentDelayFromTerm === true
     );
     setCustomPaymentRows(
       formSnapshot.customPayments?.length
@@ -476,6 +241,7 @@ function App() {
       bsmvRatePercent: bsmvRate.value,
       creditUsageDate,
       firstInstallmentDate,
+      deductFirstInstallmentDelayFromTerm,
       planType,
       prepaidInterestAmount: planType === "prepaidInterest" ? prepaidInterest.value : undefined,
       interestOnlyInstallmentCount:
@@ -491,6 +257,22 @@ function App() {
           ? parseInstallmentIncreaseFrequencyMonths(
               installmentIncreaseFrequencyMonths,
               termCount.value
+            )
+          : undefined,
+      installmentIncreaseStartNo:
+        planType === "increasingInstallment"
+          ? parseInstallmentIncreaseBoundary(
+              installmentIncreaseStartNo,
+              termCount.value,
+              "başlangıç"
+            )
+          : undefined,
+      installmentIncreaseEndNo:
+        planType === "increasingInstallment"
+          ? parseInstallmentIncreaseBoundary(
+              installmentIncreaseEndNo || String(termCount.value),
+              termCount.value,
+              "bitiş"
             )
           : undefined,
       customPayments:
@@ -596,6 +378,8 @@ function App() {
         bsmvRatePercent: Number(form.bsmv.replace(",", ".")),
         creditUsageDate: form.creditUsageDate,
         firstInstallmentDate: form.firstInstallmentDate,
+        deductFirstInstallmentDelayFromTerm:
+          form.deductFirstInstallmentDelayFromTerm === true,
         planType: form.planType ?? "standard",
         prepaidInterestAmount:
           form.planType === "prepaidInterest"
@@ -617,6 +401,22 @@ function App() {
             ? parseInstallmentIncreaseFrequencyMonths(
                 form.installmentIncreaseFrequencyMonths ?? "12",
                 recentCalculation.summary.term
+              )
+            : undefined,
+        installmentIncreaseStartNo:
+          form.planType === "increasingInstallment"
+            ? parseInstallmentIncreaseBoundary(
+                form.installmentIncreaseStartNo ?? "1",
+                recentCalculation.summary.term,
+                "başlangıç"
+              )
+            : undefined,
+        installmentIncreaseEndNo:
+          form.planType === "increasingInstallment"
+            ? parseInstallmentIncreaseBoundary(
+                form.installmentIncreaseEndNo ?? String(recentCalculation.summary.term),
+                recentCalculation.summary.term,
+                "bitiş"
               )
             : undefined,
         customPayments:
@@ -656,7 +456,7 @@ function App() {
     const recentPlanType = recentCalculation.form.planType ?? "standard";
 
     if (recentPlanType === "customPayment") {
-      return `Otomatik ${formatCurrency(recentCalculation.summary.automaticInstallmentAmount ?? 0)}`;
+      return `${recentCalculation.summary.customPaymentCount ?? 0} özel ödeme`;
     }
 
     if (["equalPrincipal", "increasingInstallment"].includes(recentPlanType)) {
@@ -824,27 +624,51 @@ function App() {
               ) : null}
 
               {planType === "increasingInstallment" ? (
-                <div className={styles.twoColumn}>
-                  <NumberInput
-                    label="Taksit Artış Oranı (%)"
-                    value={installmentIncreaseRatePercent}
-                    onChange={(value) => {
-                      setInstallmentIncreaseRatePercent(value);
-                      clearResult();
-                    }}
-                    placeholder="ör: 5"
-                  />
-                  <NumberInput
-                    label="Artış Sıklığı (Ay)"
-                    mode="integer"
-                    value={installmentIncreaseFrequencyMonths}
-                    onChange={(value) => {
-                      setInstallmentIncreaseFrequencyMonths(value);
-                      clearResult();
-                    }}
-                    placeholder="ör: 12"
-                  />
-                </div>
+                <>
+                  <div className={styles.twoColumn}>
+                    <NumberInput
+                      label="Taksit Artış Oranı (%)"
+                      value={installmentIncreaseRatePercent}
+                      onChange={(value) => {
+                        setInstallmentIncreaseRatePercent(value);
+                        clearResult();
+                      }}
+                      placeholder="ör: 5"
+                    />
+                    <NumberInput
+                      label="Artış Sıklığı (Ay)"
+                      mode="integer"
+                      value={installmentIncreaseFrequencyMonths}
+                      onChange={(value) => {
+                        setInstallmentIncreaseFrequencyMonths(value);
+                        clearResult();
+                      }}
+                      placeholder="ör: 12"
+                    />
+                  </div>
+                  <div className={styles.twoColumn}>
+                    <NumberInput
+                      label="Artış Başlangıç Taksiti"
+                      mode="integer"
+                      value={installmentIncreaseStartNo}
+                      onChange={(value) => {
+                        setInstallmentIncreaseStartNo(value);
+                        clearResult();
+                      }}
+                      placeholder="ör: 1"
+                    />
+                    <NumberInput
+                      label="Artış Bitiş Taksiti"
+                      mode="integer"
+                      value={installmentIncreaseEndNo}
+                      onChange={(value) => {
+                        setInstallmentIncreaseEndNo(value);
+                        clearResult();
+                      }}
+                      placeholder="ör: 60"
+                    />
+                  </div>
+                </>
               ) : null}
 
               {planType === "customPayment" ? (
@@ -932,6 +756,20 @@ function App() {
                   />
                 </label>
               </div>
+              <button
+                className={styles.contactToggle}
+                type="button"
+                onClick={() => {
+                  setDeductFirstInstallmentDelayFromTerm((value) => !value);
+                  clearResult();
+                }}
+              >
+                <span>
+                  <strong>İlk taksit ertelemesini vadeden düş</strong>
+                  <small>Normal ilk taksit tarihinden sonraki ertelemeyi ödeme planı taksit sayısından düşer.</small>
+                </span>
+                <b>{deductFirstInstallmentDelayFromTerm ? "Açık" : "Kapalı"}</b>
+              </button>
             </div>
 
             <div className={styles.card}>
