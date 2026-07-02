@@ -35,6 +35,36 @@
   line-height: 1.05;
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.infoButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d8e1ea;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0877e8;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 12px 28px rgba(20, 33, 61, 0.08);
+}
+
+.infoButton:hover,
+.infoButton:focus {
+  border-color: #0877e8;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(8, 119, 232, 0.13);
+}
+
 .header p {
   max-width: 520px;
   margin: 0;
@@ -43,6 +73,81 @@
   font-weight: 700;
   line-height: 1.45;
   text-align: right;
+}
+
+.aboutOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 33, 61, 0.42);
+  padding: 18px;
+}
+
+.aboutSheet {
+  width: min(520px, 100%);
+  max-height: min(680px, calc(100vh - 36px));
+  display: grid;
+  gap: 16px;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(20, 33, 61, 0.24);
+  padding: 22px;
+}
+
+.aboutSheet h2 {
+  margin: 0;
+  color: #14213d;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.aboutContent {
+  display: grid;
+  gap: 12px;
+  overflow: auto;
+  color: #607083;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+  padding-right: 4px;
+}
+
+.aboutContent p {
+  margin: 0;
+}
+
+.aboutContent strong {
+  color: #14213d;
+}
+
+.aboutContent a {
+  width: fit-content;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #0877e8;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 12px;
+  text-decoration: none;
+}
+
+.aboutContent a:hover {
+  border-color: #0877e8;
+}
+
+.aboutCloseButton {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: #0877e8;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 .layout {
@@ -556,6 +661,20 @@
 
   .header h1 {
     font-size: 28px;
+  }
+
+  .titleRow {
+    align-items: flex-start;
+  }
+
+  .infoButton {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+  }
+
+  .aboutSheet {
+    padding: 18px;
   }
 
   .card,

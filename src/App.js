@@ -88,6 +88,7 @@ function App() {
   const [recentCalculations, setRecentCalculations] = useState(safeRecentCalculations);
   const [isRecentOpen, setIsRecentOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [result, setResult] = useState(null);
   const [formError, setFormError] = useState("");
 
@@ -495,13 +496,71 @@ function App() {
         <header className={styles.header}>
           <div>
             <span>Bankacı</span>
-            <h1>Kredi Hesaplama</h1>
+            <div className={styles.titleRow}>
+              <h1>Kredi Hesaplama</h1>
+              <button
+                aria-label="Bankacı: Kredi Hesaplama hakkında"
+                className={styles.infoButton}
+                type="button"
+                onClick={() => setIsAboutOpen(true)}
+              >
+                i
+              </button>
+            </div>
           </div>
           <p>
             Standart, peşin faizli, eşit anapara, balon/özel ödeme, anapara
             ödemesiz ve artan taksitli planlar.
           </p>
         </header>
+
+        {isAboutOpen ? (
+          <div
+            className={styles.aboutOverlay}
+            role="presentation"
+            onClick={() => setIsAboutOpen(false)}
+          >
+            <section
+              aria-modal="true"
+              aria-labelledby="about-title"
+              className={styles.aboutSheet}
+              role="dialog"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <h2 id="about-title">Bankacı: Kredi Hesaplama hakkında</h2>
+              <div className={styles.aboutContent}>
+                <p>
+                  Bu uygulama, kredi hesaplamalarını sahada ve müşteri
+                  görüşmelerinde daha hızlı, pratik ve anlaşılır şekilde
+                  yapabilmek için geliştirildi.
+                </p>
+                <p>
+                  Standart taksitli kredi hesaplamasının yanında; peşin faiz
+                  ödemeli, eşit anapara, özel/balon ödeme, anapara ödemesiz
+                  dönem ve artan taksitli ödeme planları gibi gelişmiş
+                  senaryoları da destekler.
+                </p>
+                <p>
+                  Uygulamanın gelişmiş ödeme planı özelliklerinin
+                  şekillenmesinde, aktif bankacılık tecrübesiyle değerli geri
+                  bildirimler sağlayan <strong>Yasin Aslantürk</strong>'e
+                  teşekkür ederim.
+                </p>
+                <p>Geri bildirim ve iletişim için:</p>
+                <a href="https://burak-altintas.com" target="_blank" rel="noreferrer">
+                  burak-altintas.com
+                </a>
+              </div>
+              <button
+                className={styles.aboutCloseButton}
+                type="button"
+                onClick={() => setIsAboutOpen(false)}
+              >
+                Kapat
+              </button>
+            </section>
+          </div>
+        ) : null}
 
         <form className={styles.layout} onSubmit={handleCalculate}>
           <section className={styles.formStack}>
