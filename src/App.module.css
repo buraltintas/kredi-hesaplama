@@ -145,6 +145,10 @@
   gap: 12px;
 }
 
+.twoColumn + .contactToggle {
+  margin-top: 16px;
+}
+
 .segmentGroup,
 .planGrid {
   display: grid;
