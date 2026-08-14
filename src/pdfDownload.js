@@ -7,7 +7,7 @@ import {
   formatDate,
   formatDateForFileName,
   formatPercent,
-  getFirstIncreasedInstallmentAmount,
+  getFirstChangedInstallmentAmount,
   getInterestOnlyEffectiveInstallmentInfo,
   getInterestOnlyPeriodInstallmentAmount,
 } from "./loanEngine";
@@ -112,14 +112,19 @@ const getSummaryRows = (result) => {
     );
   }
 
-  if (result.planType === "increasingInstallment") {
+  if (
+    result.planType === "increasingInstallment" ||
+    result.planType === "decreasingInstallment"
+  ) {
+    const progressionLabel = result.planType === "decreasingInstallment" ? "Azalış" : "Artış";
+
     rows.push(
-      ["Taksit artış oranı", formatPercent(result.installmentIncreaseRatePercent ?? 0)],
-      ["Artış sıklığı", `${result.installmentIncreaseFrequencyMonths ?? 12} ay`],
-      ["Artış başlangıç taksiti", `${result.installmentIncreaseStartNo ?? 1}. taksit`],
-      ["Artış bitiş taksiti", `${result.installmentIncreaseEndNo ?? result.input.term}. taksit`],
+      [`Taksit ${progressionLabel.toLocaleLowerCase("tr-TR")} oranı`, formatPercent(result.installmentIncreaseRatePercent ?? 0)],
+      [`${progressionLabel} sıklığı`, `${result.installmentIncreaseFrequencyMonths ?? 12} ay`],
+      [`${progressionLabel} başlangıç taksiti`, `${result.installmentIncreaseStartNo ?? 1}. taksit`],
+      [`${progressionLabel} bitiş taksiti`, `${result.installmentIncreaseEndNo ?? result.input.term}. taksit`],
       ["İlk taksit", formatCurrency(result.firstInstallmentAmount ?? result.firstInstallment)],
-      ["İlk artış sonrası taksit", formatCurrency(getFirstIncreasedInstallmentAmount(result))],
+      [`İlk ${progressionLabel.toLocaleLowerCase("tr-TR")} sonrası taksit`, formatCurrency(getFirstChangedInstallmentAmount(result))],
       ["Son taksit", formatCurrency(result.lastInstallmentAmount ?? 0)]
     );
   }

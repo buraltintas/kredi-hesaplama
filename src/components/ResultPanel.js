@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import styles from "../App.module.css";
 import {
   PLAN_TYPE_LABELS,
@@ -5,15 +6,19 @@ import {
   formatCustomPaymentsSummary,
   formatDate,
   formatPercent,
-  getFirstIncreasedInstallmentAmount,
+  getFirstChangedInstallmentAmount,
   getInterestOnlyEffectiveInstallmentInfo,
   getInterestOnlyPeriodInstallmentAmount,
 } from "../loanEngine";
+import { getPaymentPlanRecommendations } from "../recommendations/paymentPlanRecommendationEngine";
 import Metric from "./Metric";
 
 const getHeroContent = (result) => {
   const isCustomPayment = result.planType === "customPayment";
-  const isIncreasingInstallment = result.planType === "increasingInstallment";
+  const isProgressiveInstallment =
+    result.planType === "increasingInstallment" ||
+    result.planType === "decreasingInstallment";
+  const progressionLabel = result.planType === "decreasingInstallment" ? "azalış" : "artış";
   const isInterestOnly = result.planType === "interestOnly";
   const isEqualPrincipal = result.planType === "equalPrincipal";
 
@@ -25,7 +30,7 @@ const getHeroContent = (result) => {
     };
   }
 
-  if (isIncreasingInstallment) {
+  if (isProgressiveInstallment) {
     return {
       label: "İlk Taksit / Son Taksit",
       value: `${formatCurrency(
@@ -35,7 +40,7 @@ const getHeroContent = (result) => {
         result.installmentIncreaseEndNo ?? result.input.term
       }. taksit arası, her ${
         result.installmentIncreaseFrequencyMonths ?? 12
-      } ayda bir %${result.installmentIncreaseRatePercent ?? 0} artış`,
+      } ayda bir %${result.installmentIncreaseRatePercent ?? 0} ${progressionLabel}`,
     };
   }
 
@@ -64,14 +69,37 @@ const getHeroContent = (result) => {
   };
 };
 
+const RecommendationCard = ({ recommendation }) => (
+  <article className={styles.recommendationItem}>
+    <div>
+      <span>{PLAN_TYPE_LABELS[recommendation.planType]}</span>
+      <strong>{recommendation.title}</strong>
+      <p>{recommendation.message}</p>
+    </div>
+    <ul>
+      {recommendation.details.map((detail) => (
+        <li key={detail}>{detail}</li>
+      ))}
+    </ul>
+  </article>
+);
+
 const ResultPanel = ({ result, onDownloadPdf, isScheduleOpen, onToggleSchedule }) => {
+  const [areRecommendationsOpen, setAreRecommendationsOpen] = useState(false);
+  const paymentPlanRecommendations = useMemo(
+    () => getPaymentPlanRecommendations(result),
+    [result]
+  );
   const hero = getHeroContent(result);
   const hasBrokenPeriod = result.brokenPeriod.diffDays !== 0;
   const isPrepaidInterest = result.planType === "prepaidInterest";
   const isEqualPrincipal = result.planType === "equalPrincipal";
   const isCustomPayment = result.planType === "customPayment";
   const isInterestOnly = result.planType === "interestOnly";
-  const isIncreasingInstallment = result.planType === "increasingInstallment";
+  const isProgressiveInstallment =
+    result.planType === "increasingInstallment" ||
+    result.planType === "decreasingInstallment";
+  const progressionLabel = result.planType === "decreasingInstallment" ? "Azalış" : "Artış";
   const interestOnlyInfo = getInterestOnlyEffectiveInstallmentInfo(result);
 
   return (
@@ -132,14 +160,14 @@ const ResultPanel = ({ result, onDownloadPdf, isScheduleOpen, onToggleSchedule }
               <Metric label="Son Taksit" value={formatCurrency(result.lastInstallmentAmount ?? 0)} />
             </>
           ) : null}
-          {isIncreasingInstallment ? (
+          {isProgressiveInstallment ? (
             <>
-              <Metric label="Taksit Artış Oranı" value={formatPercent(result.installmentIncreaseRatePercent ?? 0)} />
-              <Metric label="Artış Sıklığı" value={`${result.installmentIncreaseFrequencyMonths ?? 12} ay`} />
-              <Metric label="Artış Başlangıç Taksiti" value={`${result.installmentIncreaseStartNo ?? 1}. taksit`} />
-              <Metric label="Artış Bitiş Taksiti" value={`${result.installmentIncreaseEndNo ?? result.input.term}. taksit`} />
+              <Metric label={`Taksit ${progressionLabel} Oranı`} value={formatPercent(result.installmentIncreaseRatePercent ?? 0)} />
+              <Metric label={`${progressionLabel} Sıklığı`} value={`${result.installmentIncreaseFrequencyMonths ?? 12} ay`} />
+              <Metric label={`${progressionLabel} Başlangıç Taksiti`} value={`${result.installmentIncreaseStartNo ?? 1}. taksit`} />
+              <Metric label={`${progressionLabel} Bitiş Taksiti`} value={`${result.installmentIncreaseEndNo ?? result.input.term}. taksit`} />
               <Metric label="İlk Taksit" value={formatCurrency(result.firstInstallmentAmount ?? result.firstInstallment)} />
-              <Metric label="İlk Artış Sonrası Taksit" value={formatCurrency(getFirstIncreasedInstallmentAmount(result))} />
+              <Metric label={`İlk ${progressionLabel} Sonrası Taksit`} value={formatCurrency(getFirstChangedInstallmentAmount(result))} />
               <Metric label="Son Taksit" value={formatCurrency(result.lastInstallmentAmount ?? 0)} />
             </>
           ) : null}
@@ -192,6 +220,41 @@ const ResultPanel = ({ result, onDownloadPdf, isScheduleOpen, onToggleSchedule }
           <div className={styles.noteBox}>
             <strong>Özel Ödemeler</strong>
             <span>{formatCustomPaymentsSummary(result.input.customPayments)}</span>
+          </div>
+        ) : null}
+
+        {paymentPlanRecommendations.length > 0 ? (
+          <div className={styles.recommendationsBox}>
+            <button
+              className={styles.recommendationsToggle}
+              type="button"
+              onClick={() => setAreRecommendationsOpen((open) => !open)}
+            >
+              <span>
+                <strong>Alternatif Ödeme Planları</strong>
+                <small>
+                  {areRecommendationsOpen
+                    ? `${paymentPlanRecommendations.length} alternatif gösteriliyor`
+                    : `${paymentPlanRecommendations.length} alternatifi görmek için aç`}
+                </small>
+              </span>
+              <b>{areRecommendationsOpen ? "Kapat" : "Aç"}</b>
+            </button>
+
+            {areRecommendationsOpen ? (
+              <div className={styles.recommendationsList}>
+                <p>
+                  Bu öneriler finansal tavsiye değildir; aynı kredi bilgileriyle farklı
+                  ödeme planlarının karşılaştırmalı görünümüdür.
+                </p>
+                {paymentPlanRecommendations.map((recommendation) => (
+                  <RecommendationCard
+                    key={recommendation.id}
+                    recommendation={recommendation}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
         ) : null}
 

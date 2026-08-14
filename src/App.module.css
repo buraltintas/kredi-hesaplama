@@ -200,6 +200,7 @@
   display: grid;
   gap: 7px;
   margin-top: 14px;
+  min-width: 0;
 }
 
 .field span {
@@ -217,7 +218,9 @@
 
 .field input {
   width: 100%;
+  min-width: 0;
   min-height: 48px;
+  box-sizing: border-box;
   border: 1px solid #d8e1ea;
   border-radius: 8px;
   background: #ffffff;
@@ -248,6 +251,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.twoColumn > * {
+  min-width: 0;
 }
 
 .twoColumn + .contactToggle {
@@ -330,7 +337,8 @@
 
 .contactToggle,
 .recentToggle,
-.scheduleToggle {
+.scheduleToggle,
+.recommendationsToggle {
   width: 100%;
   border: 0;
   background: transparent;
@@ -346,21 +354,24 @@
 
 .contactToggle span,
 .recentToggle span,
-.scheduleToggle span {
+.scheduleToggle span,
+.recommendationsToggle span {
   display: grid;
   gap: 4px;
 }
 
 .contactToggle strong,
 .recentToggle strong,
-.scheduleToggle strong {
+.scheduleToggle strong,
+.recommendationsToggle strong {
   color: #14213d;
   font-size: 18px;
 }
 
 .contactToggle small,
 .recentToggle small,
-.scheduleToggle small {
+.scheduleToggle small,
+.recommendationsToggle small {
   color: #607083;
   font-size: 13px;
   font-weight: 700;
@@ -369,7 +380,8 @@
 
 .contactToggle b,
 .recentToggle b,
-.scheduleToggle b {
+.scheduleToggle b,
+.recommendationsToggle b {
   flex: 0 0 auto;
   border-radius: 8px;
   background: #e7f5ff;
@@ -577,6 +589,75 @@
   line-height: 1.45;
 }
 
+.recommendationsBox {
+  display: grid;
+  gap: 12px;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #f8fafc;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.recommendationsList {
+  display: grid;
+  gap: 10px;
+}
+
+.recommendationsList > p {
+  margin: 0;
+  color: #607083;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.recommendationItem {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.recommendationItem div {
+  display: grid;
+  gap: 5px;
+}
+
+.recommendationItem span {
+  color: #0877e8;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.recommendationItem strong {
+  color: #14213d;
+  font-size: 15px;
+}
+
+.recommendationItem p {
+  margin: 0;
+  color: #14213d;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.recommendationItem ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 18px;
+  color: #607083;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 .tableWrap {
   max-width: 100%;
   overflow-x: auto;
@@ -704,7 +785,8 @@
 
   .contactToggle,
   .recentToggle,
-  .scheduleToggle {
+  .scheduleToggle,
+  .recommendationsToggle {
     align-items: flex-start;
   }
 }

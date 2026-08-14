@@ -63,6 +63,9 @@ const getInitialContactPrefs = () =>
 const getInitialDeductFirstInstallmentDelay = () =>
   readJson(DEDUCT_FIRST_INSTALLMENT_DELAY_KEY, true) === true;
 
+const isProgressiveInstallmentPlanType = (type) =>
+  type === "increasingInstallment" || type === "decreasingInstallment";
+
 function App() {
   const contactPrefs = useMemo(getInitialContactPrefs, []);
   const [loanType, setLoanType] = useState("Bireysel İhtiyaç/Taşıt Kredisi");
@@ -95,6 +98,9 @@ function App() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [result, setResult] = useState(null);
   const [formError, setFormError] = useState("");
+  const isProgressiveInstallmentPlan = isProgressiveInstallmentPlanType(planType);
+  const installmentProgressionLabel =
+    planType === "decreasingInstallment" ? "Azalış" : "Artış";
 
   const clearResult = () => {
     setResult(null);
@@ -262,18 +268,18 @@ function App() {
           ? parseInterestOnlyInstallmentCount(interestOnlyInstallmentCount, termCount.value)
           : undefined,
       installmentIncreaseRatePercent:
-        planType === "increasingInstallment"
+        isProgressiveInstallmentPlan
           ? parseInstallmentIncreaseRatePercent(installmentIncreaseRatePercent)
           : undefined,
       installmentIncreaseFrequencyMonths:
-        planType === "increasingInstallment"
+        isProgressiveInstallmentPlan
           ? parseInstallmentIncreaseFrequencyMonths(
               installmentIncreaseFrequencyMonths,
               termCount.value
             )
           : undefined,
       installmentIncreaseStartNo:
-        planType === "increasingInstallment"
+        isProgressiveInstallmentPlan
           ? parseInstallmentIncreaseBoundary(
               installmentIncreaseStartNo,
               termCount.value,
@@ -281,7 +287,7 @@ function App() {
             )
           : undefined,
       installmentIncreaseEndNo:
-        planType === "increasingInstallment"
+        isProgressiveInstallmentPlan
           ? parseInstallmentIncreaseBoundary(
               installmentIncreaseEndNo || String(termCount.value),
               termCount.value,
@@ -406,18 +412,18 @@ function App() {
               )
             : undefined,
         installmentIncreaseRatePercent:
-          form.planType === "increasingInstallment"
+          isProgressiveInstallmentPlanType(form.planType)
             ? parseInstallmentIncreaseRatePercent(form.installmentIncreaseRatePercent ?? "")
             : undefined,
         installmentIncreaseFrequencyMonths:
-          form.planType === "increasingInstallment"
+          isProgressiveInstallmentPlanType(form.planType)
             ? parseInstallmentIncreaseFrequencyMonths(
                 form.installmentIncreaseFrequencyMonths ?? "12",
                 recentCalculation.summary.term
               )
             : undefined,
         installmentIncreaseStartNo:
-          form.planType === "increasingInstallment"
+          isProgressiveInstallmentPlanType(form.planType)
             ? parseInstallmentIncreaseBoundary(
                 form.installmentIncreaseStartNo ?? "1",
                 recentCalculation.summary.term,
@@ -425,7 +431,7 @@ function App() {
               )
             : undefined,
         installmentIncreaseEndNo:
-          form.planType === "increasingInstallment"
+          isProgressiveInstallmentPlanType(form.planType)
             ? parseInstallmentIncreaseBoundary(
                 form.installmentIncreaseEndNo ?? String(recentCalculation.summary.term),
                 recentCalculation.summary.term,
@@ -472,7 +478,11 @@ function App() {
       return `${recentCalculation.summary.customPaymentCount ?? 0} özel ödeme`;
     }
 
-    if (["equalPrincipal", "increasingInstallment"].includes(recentPlanType)) {
+    if (
+      ["equalPrincipal", "increasingInstallment", "decreasingInstallment"].includes(
+        recentPlanType
+      )
+    ) {
       return `İlk / Son ${formatCurrency(
         recentCalculation.summary.firstInstallmentAmount ??
           recentCalculation.summary.firstInstallment
@@ -711,11 +721,11 @@ function App() {
                 />
               ) : null}
 
-              {planType === "increasingInstallment" ? (
+              {isProgressiveInstallmentPlan ? (
                 <>
                   <div className={styles.twoColumn}>
                     <NumberInput
-                      label="Taksit Artış Oranı (%)"
+                      label={`Taksit ${installmentProgressionLabel} Oranı (%)`}
                       value={installmentIncreaseRatePercent}
                       onChange={(value) => {
                         setInstallmentIncreaseRatePercent(value);
@@ -724,7 +734,7 @@ function App() {
                       placeholder="ör: 5"
                     />
                     <NumberInput
-                      label="Artış Sıklığı (Ay)"
+                      label={`${installmentProgressionLabel} Sıklığı (Ay)`}
                       mode="integer"
                       value={installmentIncreaseFrequencyMonths}
                       onChange={(value) => {
@@ -736,7 +746,7 @@ function App() {
                   </div>
                   <div className={styles.twoColumn}>
                     <NumberInput
-                      label="Artış Başlangıç Taksiti"
+                      label={`${installmentProgressionLabel} Başlangıç Taksiti`}
                       mode="integer"
                       value={installmentIncreaseStartNo}
                       onChange={(value) => {
@@ -746,7 +756,7 @@ function App() {
                       placeholder="ör: 1"
                     />
                     <NumberInput
-                      label="Artış Bitiş Taksiti"
+                      label={`${installmentProgressionLabel} Bitiş Taksiti`}
                       mode="integer"
                       value={installmentIncreaseEndNo}
                       onChange={(value) => {
