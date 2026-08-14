@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import styles from "./App.module.css";
+import DateInput from "./components/DateInput";
 import NumberInput from "./components/NumberInput";
 import ResultPanel from "./components/ResultPanel";
 import Footer from "./Footer";
@@ -836,23 +837,17 @@ function App() {
             <div className={styles.card}>
               <h2>Tarih Bilgileri</h2>
               <div className={styles.twoColumn}>
-                <label className={styles.field}>
-                  <span>Kredi Kullanım Tarihi</span>
-                  <input
-                    type="date"
-                    value={formatDateForInput(creditUsageDate)}
-                    onChange={(event) => handleCreditUsageDateChange(event.target.value)}
-                  />
-                </label>
-                <label className={styles.field}>
-                  <span>İlk Taksit Tarihi</span>
-                  <input
-                    min={formatDateForInput(creditUsageDate)}
-                    type="date"
-                    value={formatDateForInput(firstInstallmentDate)}
-                    onChange={(event) => handleFirstInstallmentDateChange(event.target.value)}
-                  />
-                </label>
+                <DateInput
+                  label="Kredi Kullanım Tarihi"
+                  value={creditUsageDate}
+                  onChange={handleCreditUsageDateChange}
+                />
+                <DateInput
+                  label="İlk Taksit Tarihi"
+                  min={creditUsageDate}
+                  value={firstInstallmentDate}
+                  onChange={handleFirstInstallmentDateChange}
+                />
               </div>
               <button
                 className={styles.contactToggle}
