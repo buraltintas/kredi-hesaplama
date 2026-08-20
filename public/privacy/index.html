@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gizlilik Politikası — Bankacı: Kredi Hesaplama</title>
+    <meta
+      name="description"
+      content="Bankacı: Kredi Hesaplama mobil uygulaması ve web sitesi için KVKK ve GDPR uyumlu gizlilik politikası."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --text: #14213d;
+        --muted: #607083;
+        --link: #0877e8;
+        --border: #d8e1ea;
+        --surface: #ffffff;
+        --surface-muted: #eef3f8;
+        --background: #f4f7fb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--background);
+        color: var(--text);
+        font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        line-height: 1.65;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      .page {
+        margin: 0 auto;
+        max-width: 780px;
+        padding: 32px 20px 64px;
+      }
+
+      header {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 24px;
+      }
+
+      h1 {
+        font-size: 28px;
+        line-height: 1.3;
+        margin: 0 0 8px;
+      }
+
+      .meta {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0;
+      }
+
+      .lang-switch {
+        display: flex;
+        gap: 8px;
+        margin: 24px 0 0;
+      }
+
+      .lang-switch button {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--muted);
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        min-height: 40px;
+        padding: 0 16px;
+      }
+
+      .lang-switch button[aria-pressed="true"] {
+        background: var(--link);
+        border-color: var(--link);
+        color: #ffffff;
+      }
+
+      .lang-switch button:focus-visible {
+        outline: 2px solid var(--link);
+        outline-offset: 2px;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin: 40px 0 12px;
+      }
+
+      h3 {
+        font-size: 16px;
+        margin: 24px 0 8px;
+      }
+
+      p,
+      li {
+        font-size: 16px;
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      li {
+        margin-bottom: 8px;
+      }
+
+      a {
+        color: var(--link);
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-top: 16px;
+        padding: 16px 20px;
+      }
+
+      .card p {
+        margin: 0;
+      }
+
+      .table-wrapper {
+        margin-top: 16px;
+        overflow-x: auto;
+      }
+
+      table {
+        border-collapse: collapse;
+        min-width: 560px;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--border);
+        font-size: 15px;
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--surface-muted);
+        font-weight: 500;
+      }
+
+      td {
+        background: var(--surface);
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 48px;
+        padding-top: 24px;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1 id="page-title">Gizlilik Politikası</h1>
+        <p class="meta" id="page-meta">
+          Bankacı: Kredi Hesaplama · Yürürlük tarihi: 20 Ağustos 2026 · Sürüm 2.0
+        </p>
+        <div class="lang-switch">
+          <button type="button" data-lang="tr" aria-pressed="true">
+            Türkçe
+          </button>
+          <button type="button" data-lang="en" aria-pressed="false">
+            English
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <!-- ------------------------------ Türkçe ------------------------------ -->
+        <section id="content-tr" lang="tr">
+          <div class="card">
+            <p>
+              <strong>Özet:</strong> Hesap oluşturmanız gerekmez, kimlik
+              bilgilerinizi istemeyiz, yaptığınız hesaplamalar cihazınızdan
+              çıkmaz ve bizim herhangi bir sunucumuza gönderilmez. Sınırlı veri
+              yalnızca reklamların gösterilmesi ve satın aldığınız aboneliğin
+              doğrulanması için, Google, Apple ve RevenueCat tarafından işlenir.
+            </p>
+          </div>
+
+          <h2>1. Veri sorumlusu ve kapsam</h2>
+          <p>
+            Bu gizlilik politikası kapsamındaki veri sorumlusu
+            <strong>Burak Altıntaş</strong> (Antalya, Türkiye) olup, iletişim
+            adresi
+            <a href="mailto:burak.altintas@yahoo.com.tr"
+              >burak.altintas@yahoo.com.tr</a
+            >
+            adresidir.
+          </p>
+          <p>Bu politika aşağıdaki ürünler için geçerlidir:</p>
+          <ul>
+            <li>
+              <strong>Bankacı: Kredi Hesaplama</strong> mobil uygulaması (iOS ve
+              Android)
+            </li>
+            <li>
+              <a href="https://bankaci.burak-altintas.com/"
+                >bankaci.burak-altintas.com</a
+              >
+              adresindeki web sitesi
+            </li>
+          </ul>
+          <p>
+            Uygulama bir hesaplama aracıdır; bankacılık hizmeti sunmaz, kredi
+            başvurusu almaz ve hiçbir finans kuruluşuyla veri paylaşmaz.
+          </p>
+
+          <h2>2. Toplamadığımız bilgiler</h2>
+          <p>
+            Uygulamayı kullanmak için kayıt olmanız gerekmez. Ad, soyad,
+            e-posta, telefon numarası, T.C. kimlik numarası, adres, banka veya
+            kart bilgisi gibi verilerinizi <strong>toplamıyor</strong>, bize ait
+            hiçbir sunucuda saklamıyoruz — böyle bir sunucumuz da yoktur.
+            Konumunuzu okumuyor, rehberinize, fotoğraflarınıza veya
+            mesajlarınıza erişmiyoruz.
+          </p>
+
+          <h2>3. Yalnızca cihazınızda kalan bilgiler</h2>
+          <p>
+            Aşağıdaki veriler yalnızca kendi cihazınızın yerel depolamasında
+            tutulur; bize veya üçüncü taraflara aktarılmaz:
+          </p>
+          <ul>
+            <li>
+              Girdiğiniz kredi tutarı, vade, faiz oranı, KKDF/BSMV gibi
+              hesaplama bilgileri
+            </li>
+            <li>Son 20 hesaplamanızın kaydı</li>
+            <li>
+              PDF çıktısına eklemeyi tercih ettiğinizde girdiğiniz ad ve telefon
+              bilgisi
+            </li>
+            <li>Uygulama içi tercihleriniz</li>
+          </ul>
+          <p>
+            Uygulamayı sildiğinizde bu verilerin tamamı cihazınızdan silinir.
+            PDF dosyaları cihazınızda üretilir; kiminle paylaşacağınıza yalnızca
+            siz karar verirsiniz.
+          </p>
+
+          <h2>4. İşlenen veriler, amaçları ve hukuki dayanakları</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Veri</th>
+                  <th>Amaç</th>
+                  <th>Hukuki dayanak</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Reklam kimliği (Advertising ID / IDFA), cihaz modeli,
+                    işletim sistemi, dil, IP tabanlı yaklaşık konum, reklam
+                    etkileşimi
+                  </td>
+                  <td>
+                    Ücretsiz sürümde reklam gösterimi, reklam ölçümü ve sahtecilik
+                    önleme
+                  </td>
+                  <td>
+                    Açık rıza (KVKK m.5/1; GDPR m.6/1-a) — kişiselleştirilmiş
+                    reklam için. Kişiselleştirilmemiş reklamda meşru menfaat
+                    (GDPR m.6/1-f)
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Anonim uygulama kullanıcı kimliği, satın alma ve yenileme
+                    geçmişi, abonelik durumu, mağaza makbuzu, platform ve
+                    uygulama sürümü
+                  </td>
+                  <td>
+                    Abonelik hakkının doğrulanması, reklamların kapatılması,
+                    satın alımların geri yüklenmesi
+                  </td>
+                  <td>
+                    Sözleşmenin ifası (KVKK m.5/2-c; GDPR m.6/1-b)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Toplu ve kimliksizleştirilmiş kullanım istatistikleri</td>
+                  <td>
+                    Uygulamanın kararlılığını ve performansını izleme, hata
+                    ayıklama
+                  </td>
+                  <td>Meşru menfaat (GDPR m.6/1-f)</td>
+                </tr>
+                <tr>
+                  <td>Bize gönderdiğiniz e-postanın içeriği</td>
+                  <td>Destek talebinizin yanıtlanması</td>
+                  <td>
+                    Meşru menfaat / talebiniz üzerine (GDPR m.6/1-f, m.6/1-b)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Bu verilere doğrudan erişimimiz yoktur. Yalnızca toplam reklam
+            geliri, abone sayısı gibi <strong>toplulaştırılmış</strong> raporları
+            görürüz; bu raporlardan bir kişiyi ayırt etmemiz mümkün değildir.
+          </p>
+
+          <h2>5. Hizmet sağlayıcılar (veri işleyenler)</h2>
+          <p>
+            Aşağıdaki hizmet sağlayıcılar, yukarıdaki amaçlarla sınırlı olarak
+            veri işler:
+          </p>
+          <ul>
+            <li>
+              <strong>Google Ireland Ltd. / Google LLC</strong> — Google AdMob
+              (mobil reklam), Google AdSense (web reklamı) ve reklam ölçümü.
+              <a
+                href="https://policies.google.com/technologies/partner-sites"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Google'ın veri kullanımı</a
+              >
+              ·
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gizlilik politikası</a
+              >
+            </li>
+            <li>
+              <strong>RevenueCat, Inc.</strong> (ABD) — abonelik durumunun
+              doğrulanması ve yönetimi.
+              <a
+                href="https://www.revenuecat.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gizlilik politikası</a
+              >
+            </li>
+            <li>
+              <strong>Apple Inc.</strong> — App Store üzerinden dağıtım ve ödeme
+              işlemleri.
+              <a
+                href="https://www.apple.com/legal/privacy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Gizlilik politikası</a
+              >
+            </li>
+            <li>
+              <strong>Google Play</strong> — Play Store üzerinden dağıtım ve
+              ödeme işlemleri.
+            </li>
+          </ul>
+          <p>
+            Verilerinizi hiçbir zaman satmayız, kiralamayız ve reklam
+            ekosistemi dışındaki üçüncü taraflarla paylaşmayız. Yalnızca yasal
+            bir yükümlülük veya yetkili merci talebi hâlinde, gerekli ölçüde
+            paylaşım yapılabilir.
+          </p>
+
+          <h2>6. Ödeme bilgileri</h2>
+          <p>
+            Abonelik ödemeleri tamamen <strong>Apple App Store</strong> veya
+            <strong>Google Play</strong> üzerinden gerçekleşir. Kart
+            bilgilerinizi <strong>görmüyor, işlemiyor ve saklamıyoruz</strong>.
+            İptal ve iade işlemleri ilgili mağazanın kurallarına tabidir ve
+            aboneliğinizi dilediğiniz zaman mağaza hesap ayarlarınızdan iptal
+            edebilirsiniz.
+          </p>
+
+          <h2>7. Yurt dışına aktarım</h2>
+          <p>
+            Google, Apple ve RevenueCat'in sunucuları Türkiye dışında, başta
+            Amerika Birleşik Devletleri ve Avrupa Birliği ülkeleri olmak üzere
+            çeşitli ülkelerde bulunmaktadır. Bu nedenle 4. bölümde belirtilen
+            veriler yurt dışına aktarılmaktadır.
+          </p>
+          <p>
+            Bu aktarımlar; KVKK m.9 kapsamında açık rızanıza veya ilgili
+            mevzuatın öngördüğü uygun güvencelere, AB kullanıcıları bakımından
+            ise GDPR Bölüm V uyarınca Avrupa Komisyonu'nun
+            <em>Standart Sözleşme Hükümleri</em> (SCC) ve/veya yeterlilik
+            kararlarına dayanır. Söz konusu sağlayıcıların güvence mekanizmaları
+            kendi gizlilik politikalarında açıklanmıştır.
+          </p>
+
+          <h2>8. Saklama süreleri</h2>
+          <ul>
+            <li>
+              <strong>Cihazınızdaki veriler:</strong> siz silene veya uygulamayı
+              kaldırana kadar. Hesaplama geçmişi en fazla son 20 kayıtla
+              sınırlıdır; yeni kayıtlar eskileri otomatik olarak siler.
+            </li>
+            <li>
+              <strong>Abonelik kayıtları:</strong> abonelik ilişkisi süresince
+              ve mağazaların/hizmet sağlayıcının öngördüğü yasal saklama
+              süresince (ticari ve vergisel yükümlülükler nedeniyle genellikle
+              10 yıla kadar) saklanır.
+            </li>
+            <li>
+              <strong>Reklam verileri:</strong> Google'ın kendi saklama
+              politikalarında belirtilen süreler boyunca saklanır.
+            </li>
+            <li>
+              <strong>Destek yazışmaları:</strong> talebin sonuçlanmasından
+              itibaren en fazla 2 yıl.
+            </li>
+          </ul>
+
+          <h2>9. Veri güvenliği</h2>
+          <p>
+            Cihazınızdaki veriler, işletim sisteminin uygulama sanal alanı
+            (sandbox) içinde tutulur ve başka uygulamalar tarafından okunamaz.
+            Ağ üzerinden gerçekleşen tüm iletişim şifreli bağlantı (HTTPS/TLS)
+            ile yapılır. Bununla birlikte, internet üzerinden yapılan hiçbir
+            aktarımın %100 güvenli olduğu garanti edilemez.
+          </p>
+
+          <h2>10. Reklam tercihleri, izleme izni ve profilleme</h2>
+          <p>
+            Kişiselleştirilmiş reklam, ilgi alanlarınıza göre reklam seçilmesi
+            anlamında profilleme içerir. Bu profilleme sizin hakkınızda hukuki
+            sonuç doğuran veya sizi benzer şekilde önemli ölçüde etkileyen
+            otomatik bir karar üretmez.
+          </p>
+          <ul>
+            <li>
+              <strong>Avrupa Ekonomik Alanı, Birleşik Krallık ve İsviçre:</strong>
+              kişiselleştirilmiş reklam gösterilmeden önce, Google'ın onay
+              yönetim platformu üzerinden onayınız istenir. Onayınızı istediğiniz
+              zaman uygulama içinden değiştirebilirsiniz.
+            </li>
+            <li>
+              <strong>iOS:</strong> uygulamalar arası izleme için sistem düzeyinde
+              izin sorulur. İzin vermezseniz kişiselleştirilmemiş reklam
+              gösterilir; uygulama tüm işlevleriyle çalışmaya devam eder.
+            </li>
+            <li>
+              <strong>Tüm platformlar:</strong> cihaz ayarlarından reklam
+              kimliğinizi sıfırlayabilir veya kişiselleştirilmiş reklamları
+              kapatabilirsiniz.
+            </li>
+          </ul>
+          <p>
+            Reklamları tamamen kaldırmak isterseniz uygulama içindeki reklamsız
+            aboneliği satın alabilirsiniz. Abonelik aktif olduğunda uygulama
+            reklam ağına hiçbir istek göndermez.
+          </p>
+
+          <h2>11. Web sitesinde çerezler</h2>
+          <p>
+            Web sitesi, hesaplamalarınızı tarayıcınızın yerel depolamasında
+            (localStorage) tutar; bu veriler sunucuya gönderilmez. Ayrıca Google
+            AdSense reklamları için çerezler kullanılabilir. Çerezleri tarayıcı
+            ayarlarınızdan silebilir veya engelleyebilirsiniz; bu durumda
+            hesaplama geçmişiniz saklanmaz ve size kişiselleştirilmemiş reklam
+            gösterilir.
+          </p>
+
+          <h2>12. Çocukların gizliliği</h2>
+          <p>
+            Uygulama ve web sitesi çocuklara yönelik değildir. 13 yaşın (Avrupa
+            Birliği'nde ilgili üye devletin belirlediği yaş sınırının) altındaki
+            kişilerden bilerek veri toplanmaz. Böyle bir verinin toplandığını
+            fark edersek gecikmeksizin sileriz.
+          </p>
+
+          <h2>13. Kaliforniya sakinleri için ek bilgi</h2>
+          <p>
+            CCPA/CPRA kapsamında kişisel verilerinizi <strong>satmıyoruz</strong>.
+            Kişiselleştirilmiş reklam gösterimi, ilgili mevzuat bakımından
+            "paylaşma" olarak nitelendirilebilir; bunu cihaz ayarlarınızdan
+            kişiselleştirilmiş reklamları kapatarak veya reklamsız aboneliğe
+            geçerek durdurabilirsiniz. Bilgi edinme ve silme taleplerinizi
+            aşağıdaki iletişim adresine iletebilirsiniz. Bu haklarınızı
+            kullanmanız nedeniyle size ayrımcılık uygulanmaz.
+          </p>
+
+          <h2>14. Haklarınız ve başvuru yolu</h2>
+          <p>
+            KVKK m.11 ve GDPR m.15-22 kapsamında; kişisel verilerinizin işlenip
+            işlenmediğini öğrenme, bunlara erişme, düzeltilmesini veya
+            silinmesini isteme, işlenmesini kısıtlama, işlemeye itiraz etme,
+            verilerinizin taşınmasını talep etme ve verdiğiniz açık rızayı
+            geri alma haklarına sahipsiniz.
+          </p>
+          <p>
+            Uygulamada oluşturduğunuz verilerin tamamı cihazınızda tutulduğu
+            için, uygulamayı silerek bu verileri kendiniz tamamen
+            kaldırabilirsiniz. Reklam ve abonelik altyapısındaki verilere ilişkin
+            taleplerinizi
+            <a href="mailto:burak.altintas@yahoo.com.tr"
+              >burak.altintas@yahoo.com.tr</a
+            >
+            adresine iletebilirsiniz; talepleriniz en geç
+            <strong>30 gün</strong> içinde ücretsiz olarak sonuçlandırılır.
+          </p>
+          <p>
+            Talebinizin sonucundan memnun kalmazsanız Türkiye'de
+            <strong>Kişisel Verileri Koruma Kurulu</strong>'na, Avrupa
+            Birliği'nde ise bulunduğunuz ülkenin veri koruma denetim otoritesine
+            şikâyette bulunma hakkınız saklıdır.
+          </p>
+
+          <h2>15. Değişiklikler</h2>
+          <p>
+            Bu politika zaman zaman güncellenebilir. Her güncellemede bu
+            sayfadaki yürürlük tarihi ve sürüm numarası değişir. Haklarınızı
+            önemli ölçüde etkileyen değişikliklerde, değişiklik yürürlüğe
+            girmeden önce uygulama içinde bilgilendirme yapılır ve gerekiyorsa
+            yeniden onayınız istenir.
+          </p>
+
+          <h2>16. İletişim</h2>
+          <p>
+            Veri sorumlusu: <strong>Burak Altıntaş</strong> — Antalya, Türkiye
+            <br />
+            E-posta:
+            <a href="mailto:burak.altintas@yahoo.com.tr"
+              >burak.altintas@yahoo.com.tr</a
+            >
+            <br />
+            Web:
+            <a
+              href="https://burak-altintas.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              >burak-altintas.com</a
+            >
+          </p>
+        </section>
+
+        <!-- ------------------------------ English ------------------------------ -->
+        <section id="content-en" lang="en" hidden>
+          <div class="card">
+            <p>
+              <strong>In short:</strong> No account is required, we never ask
+              who you are, and the calculations you make stay on your device —
+              they are never sent to any server of ours. Limited data is
+              processed by Google, Apple and RevenueCat solely to serve ads and
+              to verify the subscription you purchased.
+            </p>
+          </div>
+
+          <h2>1. Data controller and scope</h2>
+          <p>
+            The data controller for the purposes of this policy is
+            <strong>Burak Altıntaş</strong> (Antalya, Türkiye), reachable at
+            <a href="mailto:burak.altintas@yahoo.com.tr"
+              >burak.altintas@yahoo.com.tr</a
+            >.
+          </p>
+          <p>This policy covers:</p>
+          <ul>
+            <li>
+              the <strong>Bankacı: Kredi Hesaplama</strong> mobile application
+              (iOS and Android), and
+            </li>
+            <li>
+              the website at
+              <a href="https://bankaci.burak-altintas.com/"
+                >bankaci.burak-altintas.com</a
+              >.
+            </li>
+          </ul>
+          <p>
+            The app is a calculation tool. It does not provide banking services,
+            does not accept loan applications, and shares no data with any
+            financial institution.
+          </p>
+
+          <h2>2. Information we do not collect</h2>
+          <p>
+            No registration is required. We do <strong>not</strong> collect or
+            store your name, email address, phone number, national ID, postal
+            address, or any banking or card details on any server of ours — we
+            do not operate such a server. We do not read your location, contacts,
+            photos or messages.
+          </p>
+
+          <h2>3. Information that stays on your device only</h2>
+          <p>
+            The following is kept solely in your device's local storage and is
+            never transmitted to us or to any third party:
+          </p>
+          <ul>
+            <li>
+              Loan details you enter, such as amount, term, interest rate and
+              Turkish KKDF/BSMV levies
+            </li>
+            <li>A record of your last 20 calculations</li>
+            <li>
+              The name and phone number you optionally add to PDF exports
+            </li>
+            <li>Your in-app preferences</li>
+          </ul>
+          <p>
+            Deleting the app removes all of it. PDF files are generated on your
+            device, and only you decide with whom to share them.
+          </p>
+
+          <h2>4. Data processed, purposes and legal bases</h2>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Purpose</th>
+                  <th>Legal basis</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Advertising identifier (Advertising ID / IDFA), device
+                    model, operating system, language, approximate IP-based
+                    location, ad interactions
+                  </td>
+                  <td>
+                    Serving ads in the free version, ad measurement and fraud
+                    prevention
+                  </td>
+                  <td>
+                    Consent (GDPR Art. 6(1)(a)) for personalised ads; legitimate
+                    interests (Art. 6(1)(f)) for non-personalised ads
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Anonymous app user identifier, purchase and renewal history,
+                    subscription status, store receipt, platform and app version
+                  </td>
+                  <td>
+                    Verifying entitlement, disabling ads, restoring purchases
+                  </td>
+                  <td>Performance of a contract (GDPR Art. 6(1)(b))</td>
+                </tr>
+                <tr>
+                  <td>Aggregated, de-identified usage statistics</td>
+                  <td>Monitoring stability and performance, debugging</td>
+                  <td>Legitimate interests (GDPR Art. 6(1)(f))</td>
+                </tr>
+                <tr>
+                  <td>The content of any email you send us</td>
+                  <td>Responding to your support request</td>
+                  <td>
+                    Legitimate interests / at your request (Art. 6(1)(f),
+                    6(1)(b))
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            We have no direct access to this data. We only see
+            <strong>aggregated</strong> reports such as total ad revenue or
+            subscriber counts, from which no individual can be singled out.
+          </p>
+
+          <h2>5. Service providers (processors)</h2>
+          <ul>
+            <li>
+              <strong>Google Ireland Ltd. / Google LLC</strong> — Google AdMob
+              (in-app ads), Google AdSense (website ads) and ad measurement.
+              <a
+                href="https://policies.google.com/technologies/partner-sites"
+                target="_blank"
+                rel="noopener noreferrer"
+                >How Google uses data</a
+              >
+              ·
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Privacy policy</a
+              >
+            </li>
+            <li>
+              <strong>RevenueCat, Inc.</strong> (USA) — subscription validation
+              and management.
+              <a
+                href="https://www.revenuecat.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Privacy policy</a
+              >
+            </li>
+            <li>
+              <strong>Apple Inc.</strong> — App Store distribution and payment
+              processing.
+              <a
+                href="https://www.apple.com/legal/privacy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Privacy policy</a
+              >
+            </li>
+            <li>
+              <strong>Google Play</strong> — Play Store distribution and payment
+              processing.
+            </li>
+          </ul>
+          <p>
+            We never sell or rent your data, and we do not share it with third
+            parties outside the advertising ecosystem described above.
+            Disclosure occurs only where required by law or by a lawful request
+            from a competent authority, and only to the extent required.
+          </p>
+
+          <h2>6. Payment information</h2>
+          <p>
+            Subscription payments are handled entirely by the
+            <strong>Apple App Store</strong> or <strong>Google Play</strong>. We
+            never see, process or store your card details. Cancellations and
+            refunds follow the rules of the relevant store, and you can cancel
+            at any time from your store account settings.
+          </p>
+
+          <h2>7. International transfers</h2>
+          <p>
+            Google, Apple and RevenueCat operate servers outside Türkiye,
+            including in the United States and the European Union. The data
+            described in section 4 is therefore transferred abroad.
+          </p>
+          <p>
+            Such transfers rely on your explicit consent or on the appropriate
+            safeguards required by Turkish Law No. 6698 (Art. 9), and, for users
+            in the EEA, on the European Commission's
+            <em>Standard Contractual Clauses</em> and/or adequacy decisions
+            under Chapter V of the GDPR. Each provider documents its safeguards
+            in its own privacy policy.
+          </p>
+
+          <h2>8. Retention periods</h2>
+          <ul>
+            <li>
+              <strong>Data on your device:</strong> until you delete it or
+              uninstall the app. Calculation history is capped at the most
+              recent 20 entries; newer entries automatically replace older ones.
+            </li>
+            <li>
+              <strong>Subscription records:</strong> for the duration of the
+              subscription and for the statutory retention period required of
+              the stores and the provider (commonly up to 10 years for
+              commercial and tax obligations).
+            </li>
+            <li>
+              <strong>Advertising data:</strong> for the periods stated in
+              Google's own retention policies.
+            </li>
+            <li>
+              <strong>Support correspondence:</strong> up to 2 years after the
+              request is resolved.
+            </li>
+          </ul>
+
+          <h2>9. Security</h2>
+          <p>
+            Data on your device is held inside the operating system's
+            application sandbox and cannot be read by other apps. All network
+            communication uses encrypted connections (HTTPS/TLS). No
+            transmission over the internet can be guaranteed to be entirely
+            secure.
+          </p>
+
+          <h2>10. Ad preferences, tracking permission and profiling</h2>
+          <p>
+            Personalised advertising involves profiling in the sense of
+            selecting ads based on inferred interests. It does not produce any
+            automated decision with legal effects concerning you or similarly
+            significantly affecting you.
+          </p>
+          <ul>
+            <li>
+              <strong>EEA, United Kingdom and Switzerland:</strong> consent is
+              requested through Google's consent management platform before any
+              personalised ad is served, and can be changed at any time from
+              within the app.
+            </li>
+            <li>
+              <strong>iOS:</strong> the system asks for permission to track
+              across apps. If you decline, non-personalised ads are shown and
+              the app remains fully functional.
+            </li>
+            <li>
+              <strong>All platforms:</strong> you can reset your advertising
+              identifier or opt out of personalised ads in your device settings.
+            </li>
+          </ul>
+          <p>
+            To remove ads entirely, you can purchase the ad-free subscription in
+            the app. While the subscription is active, the app sends no request
+            of any kind to the ad network.
+          </p>
+
+          <h2>11. Cookies on the website</h2>
+          <p>
+            The website stores your calculations in your browser's localStorage;
+            this data is not sent to a server. Google AdSense may also set
+            cookies to serve ads. You can clear or block cookies in your browser
+            settings; your calculation history will then not be kept, and you
+            will be shown non-personalised ads.
+          </p>
+
+          <h2>12. Children's privacy</h2>
+          <p>
+            Neither the app nor the website is directed at children. We do not
+            knowingly collect data from anyone under 13 (or under the age set by
+            the relevant EU member state). If we become aware of such data, we
+            delete it without undue delay.
+          </p>
+
+          <h2>13. Notice for California residents</h2>
+          <p>
+            We do <strong>not</strong> sell your personal information under the
+            CCPA/CPRA. Serving personalised advertising may qualify as "sharing"
+            under that law; you can stop it by turning off personalised ads in
+            your device settings or by subscribing to the ad-free version. You
+            may submit access and deletion requests to the contact address
+            below, and you will not be discriminated against for exercising
+            these rights.
+          </p>
+
+          <h2>14. Your rights and how to exercise them</h2>
+          <p>
+            Under Turkish Law No. 6698 (Art. 11) and GDPR Articles 15-22, you
+            have the right to know whether your personal data is processed, to
+            access it, to have it corrected or erased, to restrict processing,
+            to object to processing, to data portability, and to withdraw any
+            consent you have given.
+          </p>
+          <p>
+            Because everything you create in the app is held on your own device,
+            deleting the app removes it entirely without any request. For data
+            held by the advertising and subscription providers, write to
+            <a href="mailto:burak.altintas@yahoo.com.tr"
+              >burak.altintas@yahoo.com.tr</a
+            >; requests are answered free of charge within
+            <strong>30 days</strong> at the latest.
+          </p>
+          <p>
+            If you are not satisfied with the outcome, you may lodge a complaint
+            with the Turkish Personal Data Protection Board, or with the
+            supervisory authority of your country of residence in the EU.
+          </p>
+
+          <h2>15. Changes to this policy</h2>
+          <p>
+            This policy may be updated from time to time. Every update changes
+            the effective date and version number on this page. Where a change
+            materially affects your rights, we notify you inside the app before
+            it takes effect and, where required, ask for your consent again.
+          </p>
+
+          <h2>16. Contact</h2>
+          <p>
+            Data controller: <strong>Burak Altıntaş</strong> — Antalya, Türkiye
+            <br />
+            Email:
+            <a href="mailto:burak.altintas@yahoo.com.tr"
+              >burak.altintas@yahoo.com.tr</a
+            >
+            <br />
+            Web:
+            <a
+              href="https://burak-altintas.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              >burak-altintas.com</a
+            >
+          </p>
+        </section>
+      </main>
+
+      <footer>
+        <p>
+          © 2026 Burak Altıntaş ·
+          <a href="https://bankaci.burak-altintas.com/"
+            >Bankacı: Kredi Hesaplama</a
+          >
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var COPY = {
+          tr: {
+            documentTitle: "Gizlilik Politikası — Bankacı: Kredi Hesaplama",
+            title: "Gizlilik Politikası",
+            meta:
+              "Bankacı: Kredi Hesaplama · Yürürlük tarihi: 20 Ağustos 2026 · Sürüm 2.0",
+          },
+          en: {
+            documentTitle: "Privacy Policy — Bankacı: Kredi Hesaplama",
+            title: "Privacy Policy",
+            meta:
+              "Bankacı: Kredi Hesaplama · Effective date: 20 August 2026 · Version 2.0",
+          },
+        };
+
+        var buttons = document.querySelectorAll(".lang-switch button");
+        var sections = {
+          tr: document.getElementById("content-tr"),
+          en: document.getElementById("content-en"),
+        };
+        var title = document.getElementById("page-title");
+        var meta = document.getElementById("page-meta");
+
+        function applyLanguage(lang) {
+          if (!COPY[lang]) {
+            return;
+          }
+
+          Object.keys(sections).forEach(function (key) {
+            sections[key].hidden = key !== lang;
+          });
+
+          Array.prototype.forEach.call(buttons, function (button) {
+            button.setAttribute(
+              "aria-pressed",
+              String(button.getAttribute("data-lang") === lang)
+            );
+          });
+
+          document.documentElement.lang = lang;
+          document.title = COPY[lang].documentTitle;
+          title.textContent = COPY[lang].title;
+          meta.textContent = COPY[lang].meta;
+
+          try {
+            var url = new URL(window.location.href);
+            url.searchParams.set("lang", lang);
+            window.history.replaceState(null, "", url.toString());
+          } catch (error) {
+            // History API unavailable — the language still switches.
+          }
+        }
+
+        Array.prototype.forEach.call(buttons, function (button) {
+          button.addEventListener("click", function () {
+            applyLanguage(button.getAttribute("data-lang"));
+          });
+        });
+
+        // Honour an explicit ?lang=, then fall back to the browser language so
+        // store reviewers land on English without hunting for the toggle.
+        var requested = new URLSearchParams(window.location.search).get("lang");
+        var browserLanguage = (navigator.language || "tr").toLowerCase();
+        applyLanguage(
+          COPY[requested]
+            ? requested
+            : browserLanguage.indexOf("tr") === 0
+            ? "tr"
+            : "en"
+        );
+      })();
+    </script>
+  </body>
+</html>

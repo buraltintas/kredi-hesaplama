@@ -38,6 +38,9 @@ const Footer = () => {
           <ion-icon className="social-icon" name="logo-github"></ion-icon>
         </a>
       </div>
+      <a className={styles.privacyLink} href="/privacy/">
+        Gizlilik Politikası
+      </a>
       <p className={styles.copyright}>
         Copyright &copy; 2021 by Burak Altıntaş. All rights reserved.
       </p>

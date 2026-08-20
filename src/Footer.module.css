@@ -29,6 +29,19 @@
   color: #0877e8;
 }
 
+.privacyLink {
+  color: #607083;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.privacyLink:hover,
+.privacyLink:focus-visible {
+  color: #0877e8;
+  text-decoration: underline;
+}
+
 .copyright {
   color: #607083;
   font-size: 13px;
