@@ -10,7 +10,6 @@
 .heroGlow { position: absolute; width: 680px; height: 680px; right: -210px; top: -50px; border-radius: 50%; background: radial-gradient(circle, rgba(121, 86, 247, .17), rgba(37, 126, 248, .08) 45%, transparent 70%); pointer-events: none; }
 .heroCopy { position: relative; z-index: 2; min-width: 0; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #1479f2; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.eyebrow::before { content: ""; width: 22px; height: 2px; background: linear-gradient(90deg, #1479f2, #8258f6); }
 .hero h1 { margin: 22px 0; max-width: 660px; font-size: clamp(58px, 6.4vw, 88px); line-height: .96; letter-spacing: -.065em; }
 .heroCopy > p { width: 100%; max-width: 580px; margin: 0; color: #63708a; font-size: 18px; line-height: 1.72; overflow-wrap: anywhere; }
 .heroActions { width: 100%; max-width: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: 24px; margin-top: 34px; }
