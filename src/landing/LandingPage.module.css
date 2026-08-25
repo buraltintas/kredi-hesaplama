@@ -74,7 +74,8 @@
 .finalCta > img { width: 76px; height: 76px; display: block; margin: 0 auto 24px; border-radius: 22px; box-shadow: 0 18px 40px rgba(47, 99, 209, .2); }
 .finalCta h2 { max-width: 760px; margin-left: auto; margin-right: auto; }
 .finalCta > p { margin-bottom: 29px; }
-.finalCta .storeButtons { justify-content: center; }
+.finalCta .storeButtons { width: fit-content; margin: 0 auto; justify-content: center; }
+.finalCta .storeButtons a { flex: 0 0 180px; width: 180px; }
 .footer { width: min(1180px, calc(100% - 40px)); min-height: 170px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 25px; }
 .footer > p { color: #63708a; font-size: 13px; }
 .footer > div:nth-of-type(2) { display: flex; justify-content: flex-end; gap: 22px; }
@@ -124,7 +125,8 @@
   .premiumSection { width: min(100% - 28px, 1180px); grid-template-columns: 1fr; gap: 20px; padding: 85px 0; }
   .premiumSection p { font-size: 17px; }
   .finalCta { margin: 0 10px 10px; border-radius: 22px; padding: 75px 16px; }
-  .finalCta .storeButtons { max-width: 360px; margin: 0 auto; }
+  .finalCta .storeButtons { width: min(100%, 420px); max-width: 420px; display: grid; margin: 0 auto; }
+  .finalCta .storeButtons a { width: 100%; }
   .footer { width: min(100% - 28px, 1180px); grid-template-columns: 1fr; padding-top: 45px; }
   .footer > div:nth-of-type(2) { justify-content: flex-start; flex-wrap: wrap; }
   .footer small { grid-column: auto; }
@@ -133,6 +135,7 @@
 @media (max-width: 430px) {
   .storeButtons { max-width: 270px; grid-template-columns: 1fr; }
   .storeButtons a { min-height: 56px; }
+  .finalCta .storeButtons { width: min(100%, 270px); max-width: 270px; }
   .productStage { height: 420px; }
   .screenshotPair { height: 410px; }
 }
