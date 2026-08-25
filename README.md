@@ -52,6 +52,20 @@ npm run build
 
 Build çıktısı `build/` klasörüne üretilir.
 
+## Cloud Run
+
+Repo kökündeki `Dockerfile`, React production build'ini oluşturup Nginx ile
+Cloud Run'ın sağladığı `$PORT` üzerinden servis eder. Cloud Build sürekli
+dağıtım ayarları:
+
+- Branch: `^main$`
+- Build type: `Dockerfile`
+- Source location: `/Dockerfile`
+
+Entrypoint veya function target girilmez. `/admin` SPA fallback ile açılır;
+mevcut `/privacy/` sayfası ayrı statik belge olarak korunur. Sağlık kontrolü
+`/healthz` yolundadır.
+
 ## Teknik Notlar
 
 - React 17 ve Create React App 4 kullanır.
