@@ -1,0 +1,76 @@
+.adminShell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  background: #f5f7fb;
+  color: #111c36;
+}
+
+.adminShell aside {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dce4f1;
+  background: #fff;
+  padding: 25px 20px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #111c36;
+  font-size: 20px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.brand img { width: 38px; height: 38px; border-radius: 11px; }
+.adminShell nav { display: grid; gap: 5px; margin-top: 45px; }
+
+.adminShell nav span {
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+  border-radius: 9px;
+  color: #8a95a8;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 13px;
+  opacity: .58;
+}
+
+.adminShell nav .active { background: #eaf3ff; color: #1479f2; opacity: 1; }
+.adminShell aside > small { margin-top: auto; color: #9aa5b7; font-size: 10px; padding: 0 13px; }
+.adminShell main { padding: 34px 42px; }
+.adminShell header { display: flex; align-items: center; justify-content: space-between; }
+.adminShell header span { color: #1479f2; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+.adminShell h1 { margin: 5px 0 0; font-size: 32px; letter-spacing: -.035em; }
+.adminShell header a { border: 1px solid #d6dfec; border-radius: 10px; color: #526079; font-size: 12px; font-weight: 800; padding: 10px 13px; text-decoration: none; }
+
+.emptyPanel {
+  min-height: 450px;
+  margin-top: 30px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  border: 1px solid #dce4f1;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  padding: 35px;
+}
+
+.emptyIcon { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 15px; background: linear-gradient(135deg, #1479f2, #7959f5); color: #fff; font-size: 20px; font-weight: 900; }
+.emptyPanel h2 { margin: 18px 0 8px; }
+.emptyPanel p { max-width: 490px; margin: 0; color: #6c788e; font-size: 14px; line-height: 1.6; }
+.emptyPanel span { margin-top: 22px; border-radius: 20px; background: #f0f3f8; color: #7e899c; font-size: 10px; font-weight: 850; padding: 8px 11px; text-transform: uppercase; }
+
+@media (max-width: 720px) {
+  .adminShell { grid-template-columns: 1fr; }
+  .adminShell aside { position: static; height: auto; flex-direction: row; align-items: center; border-right: 0; border-bottom: 1px solid #dce4f1; }
+  .adminShell aside nav, .adminShell aside > small { display: none; }
+  .adminShell main { padding: 24px 18px; }
+}

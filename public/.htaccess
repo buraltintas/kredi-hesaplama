@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Existing static pages such as /privacy/ must keep serving their own files.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Client-side route used by the future admin shell.
+RewriteRule ^ index.html [L]

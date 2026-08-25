@@ -1,10 +1,18 @@
 # Bankacı: Kredi Hesaplama
 
-Bankacı: Kredi Hesaplama, kredi tutarı, vade, aylık faiz oranı, KKDF/BSMV ve ödeme planı tipine göre detaylı geri ödeme planı oluşturan Türkçe bir React web uygulamasıdır.
+Bankacı web projesi, mobil uygulamayı tanıtan SEO uyumlu landing page ile ileride kullanılacak `/admin` yönetim kabuğunu içerir. Önceki kredi hesaplama motoru kaynak kodda korunmaktadır ancak ana rotada sunulmaz.
 
-Canlı adres: https://bankaci.burak-altintas.com/
+Planlanan ana adres: https://bankaci.app/
 
-## Özellikler
+Mevcut adres: https://bankaci.burak-altintas.com/
+
+## Web yüzeyleri
+
+- `/`: Bankacı mobil uygulama landing page'i
+- `/admin`: Şimdilik statik ve veri bağlantısı olmayan yönetim kabuğu
+- `/privacy/`: Mağaza ve mevzuat için mevcut gizlilik sayfası (korunur)
+
+## Korunan hesaplama kodu
 
 - Standart sabit taksitli kredi hesaplama
 - Peşin faiz ödemeli plan

@@ -1,6 +1,6 @@
 {
   "short_name": "Bankacı",
-  "name": "Bankacı: Kredi Hesaplama",
+  "name": "Bankacı — Bankacılar için finansal araçlar",
   "icons": [
     {
       "src": "favicon-32x32.png",
@@ -21,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0877E8",
-  "background_color": "#F3F6FA"
+  "theme_color": "#111C36",
+  "background_color": "#F7F9FC"
 }
