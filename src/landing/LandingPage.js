@@ -190,6 +190,7 @@ function LandingPage() {
               müşteriye özel senaryolar hazırladığınız ve meslektaşlarınızla bağlantı
               kurduğunuz kapsamlı bir çalışma platformuna evriliyor.
             </p>
+            <span className={styles.mobileRoadmapBadge}>Yakında</span>
           </div>
           <div className={styles.roadmapList}>
             {roadmap.map((item, index) => (

@@ -20,6 +20,11 @@ güncellenmelidir. Yeni veri kategorisi, hizmet sağlayıcı, yurt dışı aktar
 saklama süresi veya kullanıcıya dönük özellik eklenirken privacy metni ve mobil
 mağaza veri beyanları birlikte gözden geçirilir.
 
+Doğrulanmış üyelik e-postası, opaque RevenueCat kullanıcı kimliği korunarak
+destek sırasında aboneliği bulmak amacıyla RevenueCat subscriber attribute olarak
+aktarılır. Bu akış değişirse privacy metni, Apple App Privacy ve Google Play Data
+Safety beyanları birlikte güncellenmelidir.
+
 Sürüm 3.0 ile Türkçe metin yeni üyelik altyapısına göre yenilenmiş, artık gerçek
 veri akışını yansıtmayan İngilizce çevirinin dil seçicisi yayından kaldırılmıştır.
 İngilizce seçenek yeniden açılmadan önce metin Türkçe sürüm 3.0 ile bütünüyle

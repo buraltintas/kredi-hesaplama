@@ -59,6 +59,7 @@
 .roadmapSection { padding: 120px max(20px, calc((100vw - 1180px) / 2)); display: grid; grid-template-columns: .9fr 1.1fr; gap: 100px; background: #111c36; color: #fff; }
 .roadmapCopy { align-self: start; position: sticky; top: 40px; }
 .roadmapCopy > p { color: #aab6cb; }
+.mobileRoadmapBadge { display: none; }
 .roadmapList { border-top: 1px solid rgba(255,255,255,.14); }
 .roadmapList > div { min-height: 87px; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,.14); }
 .roadmapList span { color: #7eafff; font-size: 11px; font-weight: 900; }
@@ -115,6 +116,8 @@
   .featureGrid article { min-height: 210px; }
   .featureGrid h3 { margin-top: 48px; }
   .roadmapSection { padding-top: 85px; padding-bottom: 85px; }
+  .roadmapCopy > p { margin-bottom: 0; }
+  .mobileRoadmapBadge { display: inline-flex; margin-top: 24px; border: 1px solid rgba(126,175,255,.45); border-radius: 20px; background: rgba(126,175,255,.08); color: #9fc3ff; font-size: 10px; font-weight: 850; letter-spacing: .08em; padding: 8px 12px; text-transform: uppercase; }
   .roadmapList > div { grid-template-columns: 34px 1fr; }
   .roadmapList i { display: none; }
   .roadmapList p { font-size: 15px; }
