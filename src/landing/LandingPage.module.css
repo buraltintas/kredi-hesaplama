@@ -9,8 +9,7 @@
 .hero { position: relative; width: min(1180px, calc(100% - 40px)); min-height: 690px; margin: 0 auto; display: grid; grid-template-columns: .98fr 1.02fr; align-items: center; gap: 56px; padding: 50px 0 78px; }
 .heroGlow { position: absolute; width: 680px; height: 680px; right: -210px; top: -50px; border-radius: 50%; background: radial-gradient(circle, rgba(121, 86, 247, .17), rgba(37, 126, 248, .08) 45%, transparent 70%); pointer-events: none; }
 .heroCopy { position: relative; z-index: 2; min-width: 0; }
-.eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #1479f2; font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.hero h1 { margin: 22px 0; max-width: 660px; font-size: clamp(58px, 6.4vw, 88px); line-height: .96; letter-spacing: -.065em; }
+.hero h1 { margin: 0 0 22px; max-width: 660px; font-size: clamp(58px, 6.4vw, 88px); line-height: .96; letter-spacing: -.065em; }
 .heroCopy > p { width: 100%; max-width: 580px; margin: 0; color: #63708a; font-size: 18px; line-height: 1.72; overflow-wrap: anywhere; }
 .heroActions { width: 100%; max-width: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: 24px; margin-top: 34px; }
 .storeButtons { max-width: 100%; display: flex; flex-wrap: wrap; gap: 10px; }
@@ -59,7 +58,6 @@
 
 .roadmapSection { padding: 120px max(20px, calc((100vw - 1180px) / 2)); display: grid; grid-template-columns: .9fr 1.1fr; gap: 100px; background: #111c36; color: #fff; }
 .roadmapCopy { align-self: start; position: sticky; top: 40px; }
-.roadmapCopy .eyebrow { color: #7eafff; }
 .roadmapCopy > p { color: #aab6cb; }
 .roadmapList { border-top: 1px solid rgba(255,255,255,.14); }
 .roadmapList > div { min-height: 87px; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,.14); }
@@ -85,7 +83,6 @@
   .hero { grid-template-columns: 1fr; padding-top: 80px; }
   .heroCopy { text-align: center; }
   .heroCopy > p { margin: 0 auto; }
-  .hero .eyebrow { justify-content: center; }
   .heroActions { flex-direction: column; justify-content: center; }
   .storeButtons { width: min(100%, 420px); justify-content: center; }
   .productStage { margin-top: -20px; }

@@ -116,7 +116,6 @@ function LandingPage() {
         <section className={styles.hero}>
           <div className={styles.heroGlow} aria-hidden="true" />
           <div className={styles.heroCopy}>
-            <span className={styles.eyebrow}>Bankacılar için geliştirildi</span>
             <h1>Hesaplamadan<br />daha fazlası.</h1>
             <p>
               Kredi, mevduat ve konut kredisi devir hesaplamalarını hızlandıran;
@@ -169,7 +168,6 @@ function LandingPage() {
 
         <section className={styles.features} id="ozellikler">
           <div className={styles.sectionIntro}>
-            <span className={styles.eyebrow}>Bugün Bankacı’da</span>
             <h2>Görüşme sırasında ihtiyacınız olan araçlar.</h2>
             <p>Sade girişler, hızlı sonuçlar ve müşteriye anlatması kolay çıktılar.</p>
           </div>
@@ -186,7 +184,6 @@ function LandingPage() {
 
         <section className={styles.roadmapSection} id="gelecek">
           <div className={styles.roadmapCopy}>
-            <span className={styles.eyebrow}>Bankacı büyüyor</span>
             <h2>Bankacının dijital çalışma alanına dönüşüyor.</h2>
             <p>
               Bankacı; bireysel ve ticari bankacılıkta fırsatları takip ettiğiniz,
@@ -218,7 +215,6 @@ function LandingPage() {
 
         <section className={styles.finalCta}>
           <img src="/icon.png" alt="Bankacı uygulama ikonu" />
-          <span className={styles.eyebrow}>Şimdi cebinizde</span>
           <h2>Bir sonraki müşteri görüşmesine hazır olun.</h2>
           <p>Bankacı’yı ücretsiz indirin. Hesaplamaya saniyeler içinde başlayın.</p>
           <StoreButtons />
