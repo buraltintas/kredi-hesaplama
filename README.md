@@ -10,7 +10,25 @@ Mevcut adres: https://bankaci.burak-altintas.com/
 
 - `/`: Bankacı mobil uygulama landing page'i
 - `/admin`: Şimdilik statik ve veri bağlantısı olmayan yönetim kabuğu
-- `/privacy/`: Mağaza ve mevzuat için mevcut gizlilik sayfası (korunur)
+- `/privacy/`: KVKK aydınlatması; üyelik/OTP, profil ve public feed, RevenueCat
+  Premium, push, reklam, GCS medya ve takma kimlikli hesaplama analitiğini kapsar
+
+## Gizlilik metni bakım notu
+
+`public/privacy/index.html` ürünün gerçek veri akışıyla aynı değişiklik setinde
+güncellenmelidir. Yeni veri kategorisi, hizmet sağlayıcı, yurt dışı aktarım,
+saklama süresi veya kullanıcıya dönük özellik eklenirken privacy metni ve mobil
+mağaza veri beyanları birlikte gözden geçirilir.
+
+Sürüm 3.0 ile Türkçe metin yeni üyelik altyapısına göre yenilenmiş, artık gerçek
+veri akışını yansıtmayan İngilizce çevirinin dil seçicisi yayından kaldırılmıştır.
+İngilizce seçenek yeniden açılmadan önce metin Türkçe sürüm 3.0 ile bütünüyle
+eşitlenmeli ve ayrıca hukuki dil kontrolünden geçirilmelidir.
+
+Üyelik yayınlanmadan önce mobil uygulamada bulunabilir hesap silme akışı ve
+backend'de ilişkili profil/feed/session/push verilerini kapsayan silme endpoint'i
+tamamlanmalıdır. Hesap silme mağaza aboneliğini otomatik iptal etmez; kullanıcıya
+Apple/Google abonelik yönetimi ayrıca gösterilmelidir.
 
 ## Korunan hesaplama kodu
 
