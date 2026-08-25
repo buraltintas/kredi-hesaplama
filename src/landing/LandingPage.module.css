@@ -16,14 +16,14 @@
 
 .hero { position: relative; width: min(1180px, calc(100% - 40px)); min-height: 690px; margin: 0 auto; display: grid; grid-template-columns: .98fr 1.02fr; align-items: center; gap: 56px; padding: 50px 0 78px; }
 .heroGlow { position: absolute; width: 680px; height: 680px; right: -210px; top: -50px; border-radius: 50%; background: radial-gradient(circle, rgba(121, 86, 247, .17), rgba(37, 126, 248, .08) 45%, transparent 70%); pointer-events: none; }
-.heroCopy { position: relative; z-index: 2; }
+.heroCopy { position: relative; z-index: 2; min-width: 0; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-size: 12px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
 .eyebrow::before { content: ""; width: 22px; height: 2px; background: linear-gradient(90deg, var(--blue), var(--purple)); }
 .hero h1 { margin: 22px 0; max-width: 660px; font-size: clamp(58px, 6.4vw, 88px); line-height: .96; letter-spacing: -.065em; }
-.heroCopy > p { max-width: 580px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.72; }
-.heroActions { display: flex; align-items: center; gap: 24px; margin-top: 34px; }
-.storeButtons { display: flex; flex-wrap: wrap; gap: 10px; }
-.storeButtons a { min-width: 166px; min-height: 58px; display: flex; align-items: center; gap: 11px; border-radius: 13px; background: var(--navy); color: #fff; padding: 9px 16px; text-decoration: none; box-shadow: 0 12px 26px rgba(17, 28, 54, .16); transition: transform .2s ease, box-shadow .2s ease; }
+.heroCopy > p { width: 100%; max-width: 580px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.72; overflow-wrap: anywhere; }
+.heroActions { width: 100%; max-width: 100%; display: flex; align-items: center; flex-wrap: wrap; gap: 24px; margin-top: 34px; }
+.storeButtons { max-width: 100%; display: flex; flex-wrap: wrap; gap: 10px; }
+.storeButtons a { flex: 1 1 166px; min-width: 0; min-height: 58px; display: flex; align-items: center; gap: 11px; border-radius: 13px; background: var(--navy); color: #fff; padding: 9px 16px; text-decoration: none; box-shadow: 0 12px 26px rgba(17, 28, 54, .16); transition: transform .2s ease, box-shadow .2s ease; }
 .storeButtons a:hover { transform: translateY(-2px); box-shadow: 0 17px 32px rgba(17, 28, 54, .22); }
 .storeButtons small, .storeButtons strong { display: block; line-height: 1.12; }
 .storeButtons small { font-size: 10px; opacity: .75; }
@@ -41,7 +41,7 @@
 .screenshotPair figure { position: absolute; width: 202px; height: 440px; margin: 0; border: 7px solid #111a2e; border-radius: 31px; background: #fff; box-shadow: 0 34px 70px rgba(17, 28, 54, .25); overflow: hidden; }
 .screenshotPair img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .screenPrimary { left: 5px; z-index: 2; transform: rotate(-7deg) translateY(26px); }
-.screenResult { left: 50%; z-index: 4; width: 238px !important; height: 518px !important; transform: translateX(-50%); }
+.screenshotPair .screenResult { left: 50%; z-index: 4; width: 238px; height: 518px; transform: translateX(-50%); }
 .screenSecondary { right: 5px; z-index: 3; transform: rotate(7deg) translateY(26px); }
 
 .marquee { min-height: 74px; display: flex; align-items: center; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
@@ -94,7 +94,8 @@
   .heroCopy { text-align: center; }
   .heroCopy > p { margin: 0 auto; }
   .hero .eyebrow { justify-content: center; }
-  .heroActions { justify-content: center; }
+  .heroActions { flex-direction: column; justify-content: center; }
+  .storeButtons { width: min(100%, 420px); justify-content: center; }
   .productStage { margin-top: -20px; }
   .featureGrid { grid-template-columns: repeat(2, 1fr); }
   .roadmapSection { grid-template-columns: 1fr; gap: 55px; }
@@ -106,17 +107,18 @@
   .brand { font-size: 18px; }
   .brand img { width: 34px; height: 34px; }
   .hero { width: min(100% - 28px, 1180px); min-height: 0; gap: 20px; padding: 65px 0 45px; }
-  .hero h1 { font-size: 54px; }
+  .hero h1 { max-width: 100%; font-size: clamp(43px, 13vw, 54px); overflow-wrap: anywhere; }
   .heroCopy > p { font-size: 16px; }
-  .heroActions { flex-direction: column; }
-  .storeButtons { width: 100%; }
-  .storeButtons a { flex: 1; min-width: 145px; padding: 8px 12px; }
-  .productStage { height: 480px; transform: scale(.87); margin: -10px -30px; }
+  .heroActions { width: 100%; }
+  .storeButtons { width: min(100%, 420px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 8px; }
+  .storeButtons a { width: 100%; min-width: 0; padding: 8px 10px; }
+  .storeButtons strong { font-size: 15px; }
+  .productStage { width: 100%; height: 460px; margin: 0; transform: none; }
   .orbitOne { width: 450px; height: 450px; }
-  .screenshotPair { width: 440px; }
-  .screenshotPair figure { width: 184px; height: 400px; }
+  .screenshotPair { width: 100%; max-width: 440px; height: 450px; }
+  .screenshotPair figure { width: clamp(150px, 42vw, 184px); height: auto; aspect-ratio: 1206 / 2622; }
   .screenPrimary { left: 0; }
-  .screenResult { width: 218px !important; height: 474px !important; }
+  .screenshotPair .screenResult { width: clamp(182px, 50vw, 218px); height: auto; aspect-ratio: 1206 / 2622; }
   .screenSecondary { right: 0; }
   .marquee { min-height: 68px; mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
   .features { width: min(100% - 28px, 1180px); padding: 90px 0; }
@@ -134,6 +136,13 @@
   .footer { width: min(100% - 28px, 1180px); grid-template-columns: 1fr; padding-top: 45px; }
   .footer > div:nth-of-type(2) { justify-content: flex-start; flex-wrap: wrap; }
   .footer small { grid-column: auto; }
+}
+
+@media (max-width: 430px) {
+  .storeButtons { max-width: 270px; grid-template-columns: 1fr; }
+  .storeButtons a { min-height: 56px; }
+  .productStage { height: 420px; }
+  .screenshotPair { height: 410px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
