@@ -40,6 +40,7 @@ const currentFeatures = [
 ];
 
 const roadmap = [
+  "Ticari bankacılık araçları: spot ve rotatif kredi, dönemsel ödeme ve iskonto hesaplamaları",
   "Bankaların kredi ve mevduat kampanyaları",
   "Kişiye özel yapay zekâ destekli ödeme planı",
   "Bankacılar için profesyonel paylaşım akışı",
@@ -188,9 +189,9 @@ function LandingPage() {
             <span className={styles.eyebrow}>Bankacı büyüyor</span>
             <h2>Bankacının dijital çalışma alanına dönüşüyor.</h2>
             <p>
-              Bankacı; yalnızca hesaplama yapan bir uygulamadan, fırsatları takip
-              ettiğiniz, müşteriye özel senaryolar hazırladığınız ve meslektaşlarınızla
-              bağlantı kurduğunuz bir platforma evriliyor.
+              Bankacı; bireysel ve ticari bankacılıkta fırsatları takip ettiğiniz,
+              müşteriye özel senaryolar hazırladığınız ve meslektaşlarınızla bağlantı
+              kurduğunuz kapsamlı bir çalışma platformuna evriliyor.
             </p>
           </div>
           <div className={styles.roadmapList}>
