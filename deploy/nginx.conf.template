@@ -44,6 +44,12 @@ server {
         try_files $uri $uri/ /privacy/index.html =404;
     }
 
+    location /admin {
+        add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        try_files $uri $uri/ /index.html;
+    }
+
     # The landing page and future /admin UI use client-side routing.
     location / {
         try_files $uri $uri/ /index.html;

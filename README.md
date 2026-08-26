@@ -7,7 +7,8 @@ https://bankaci.app/
 ## Web yüzeyleri
 
 - `/`: Bankacı mobil uygulama landing page'i
-- `/admin`: Şimdilik statik ve veri bağlantısı olmayan yönetim kabuğu
+- `/admin`: Env allowlist'indeki yönetici e-postasına gönderilen tek kullanımlık
+  kodla açılan, tokenı kalıcı tarayıcı depolamasına yazmayan yönetim alanı
 - `/privacy/`: KVKK aydınlatması; üyelik/OTP, profil ve public feed, RevenueCat
   Premium, push, reklam, GCS medya ve takma kimlikli hesaplama analitiğini kapsar
 

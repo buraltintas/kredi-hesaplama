@@ -1,5 +1,5 @@
 import React from "react";
-import AdminPage from "./admin/AdminPage";
+import AdminPage from "./admin/AdminSecurePage";
 import LandingPage from "./landing/LandingPage";
 
 function SiteApp() {

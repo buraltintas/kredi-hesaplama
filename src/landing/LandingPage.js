@@ -205,7 +205,7 @@ function LandingPage() {
 
         <section className={styles.premiumSection}>
           <div>
-            <span className={styles.premiumBadge}>Premium Bankacı</span>
+            <span className={styles.premiumBadge}>PREMIUM BANKACI</span>
             <h2>Kesintisiz çalışın.<br />Daha fazlasını yapın.</h2>
           </div>
           <p>
