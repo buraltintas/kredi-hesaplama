@@ -2,9 +2,7 @@
 
 Bankacı web projesi, mobil uygulamayı tanıtan SEO uyumlu landing page ile ileride kullanılacak `/admin` yönetim kabuğunu içerir. Önceki kredi hesaplama motoru kaynak kodda korunmaktadır ancak ana rotada sunulmaz.
 
-Planlanan ana adres: https://bankaci.app/
-
-Mevcut adres: https://bankaci.burak-altintas.com/
+https://bankaci.app/
 
 ## Web yüzeyleri
 
