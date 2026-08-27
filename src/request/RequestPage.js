@@ -59,6 +59,29 @@ function LoanTypeSelect({ value, onChange }) {
   </div>;
 }
 
+const formatFileSize = (bytes) => {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1).replace(".", ",")} MB`;
+};
+
+function SelectedFile({ file, onRemove }) {
+  const [previewUrl, setPreviewUrl] = useState("");
+  const isImage = file.type === "image/jpeg" || file.type === "image/png";
+
+  useEffect(() => {
+    if (!isImage) return undefined;
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file, isImage]);
+
+  return <div className={styles.selectedFile}>
+    {previewUrl ? <img className={styles.filePreview} src={previewUrl} alt="" /> : <div className={styles.pdfPreview}>PDF</div>}
+    <div className={styles.fileInfo}><strong title={file.name}>{file.name}</strong><span>{formatFileSize(file.size)}</span></div>
+    <button aria-label={`${file.name} dosyasını kaldır`} className={styles.removeFile} onClick={onRemove} type="button">×</button>
+  </div>;
+}
+
 function RequestFooter() {
   return <footer className={styles.footer}>
     <a className={styles.footerBrand} href="https://bankaci.app" aria-label="Bankacı Premium ana sayfa">
@@ -82,6 +105,7 @@ function RequestPage({ requestId }) {
   const [busy, setBusy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [files, setFiles] = useState([]);
+  const fileInputRef = useRef(null);
   const [form, setForm] = useState({ fullName: "", phone: "", email: "", loanType: "consumer", amount: "", termMonths: "", notes: "", consent: false });
 
   useEffect(() => {
@@ -105,6 +129,16 @@ function RequestPage({ requestId }) {
 
   const whatsapp = useMemo(() => link?.banker?.phone ? whatsappUrl(link.banker.phone) : "", [link]);
   const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+  const addFiles = (selectedFiles) => {
+    setFiles((current) => {
+      const uniqueFiles = [...current, ...selectedFiles].filter((file, index, list) =>
+        list.findIndex((candidate) => candidate.name === file.name && candidate.size === file.size && candidate.lastModified === file.lastModified) === index
+      );
+      return uniqueFiles.slice(0, 5);
+    });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+  const removeFile = (index) => setFiles((current) => current.filter((_, fileIndex) => fileIndex !== index));
 
   const submit = async (event) => {
     event.preventDefault();
@@ -142,6 +176,10 @@ function RequestPage({ requestId }) {
       <h1>{link.label}</h1>
       <div className={styles.banker}>
         <strong>{link.banker.displayName}</strong>
+        <div className={styles.contactDetails}>
+          <span>{link.banker.phone}</span>
+          {link.banker.email ? <span>{link.banker.email}</span> : null}
+        </div>
       </div>
       <div className={styles.contactRow}><a href={`tel:${link.banker.phone}`}>Ara</a>{whatsapp && <a href={whatsapp} target="_blank" rel="noreferrer">WhatsApp</a>}{link.banker.email && <a href={`mailto:${link.banker.email}`}>E-posta</a>}</div>
     </section>
@@ -152,7 +190,16 @@ function RequestPage({ requestId }) {
       <div className={styles.field}><span className={styles.fieldLabel} id="loan-type-label">Kredi türü</span><LoanTypeSelect value={form.loanType} onChange={(value) => update("loanType", value)} /></div>
       <div className={styles.grid}><label>Talep edilen tutar (TL)<input required min="1" max="1000000000" step="0.01" type="number" inputMode="decimal" value={form.amount} onChange={(e) => update("amount", e.target.value)} /></label><label>Vade (ay)<input required min="1" max="360" type="number" inputMode="numeric" value={form.termMonths} onChange={(e) => update("termMonths", e.target.value)} /></label></div>
       <label>Not <small>(isteğe bağlı)</small><textarea maxLength="2000" rows="4" value={form.notes} onChange={(e) => update("notes", e.target.value)} /></label>
-      <label>Belgeler <small>(isteğe bağlı, en fazla 5 dosya)</small><input type="file" accept="application/pdf,image/jpeg,image/png" multiple onChange={(e) => setFiles(Array.from(e.target.files || []).slice(0, 5))} /><span className={styles.hint}>PDF, JPG veya PNG · Dosya başına en fazla 6 MB</span></label>
+      <div className={styles.field}>
+        <span className={styles.fieldLabel}>Belgeler <small>(isteğe bağlı, en fazla 5 dosya)</small></span>
+        <div className={styles.filePicker}>
+          <input id="request-documents" ref={fileInputRef} className={styles.fileInput} type="file" accept="application/pdf,image/jpeg,image/png" multiple onChange={(e) => addFiles(Array.from(e.target.files || []))} />
+          <label className={styles.filePickerButton} htmlFor="request-documents">Belge seç</label>
+          <span>{files.length ? `${files.length} / 5 dosya seçildi` : "Henüz dosya seçilmedi"}</span>
+        </div>
+        {files.length ? <div className={styles.selectedFiles}>{files.map((file, index) => <SelectedFile file={file} key={`${file.name}-${file.size}-${file.lastModified}`} onRemove={() => removeFile(index)} />)}</div> : null}
+        <span className={styles.hint}>PDF, JPG veya PNG · Dosya başına en fazla 6 MB</span>
+      </div>
       <label className={styles.consent}><input type="checkbox" checked={form.consent} onChange={(e) => update("consent", e.target.checked)} /><span>Girdiğim bilgilerin ve eklediğim belgelerin talep değerlendirmesi ve benimle iletişim kurulması amacıyla form sahibine iletilmesini kabul ediyorum.</span></label>
       {error && <div className={styles.error}>{error}</div>}
       <button disabled={busy} type="submit">{busy ? "Talebiniz iletiliyor…" : "Talebi ilet"}</button>
