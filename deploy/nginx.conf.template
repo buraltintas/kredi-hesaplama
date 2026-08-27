@@ -50,6 +50,15 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
+    # Share-friendly request URLs. The API returns server-rendered Open Graph
+    # metadata with the banker's current display name, then redirects browsers
+    # to the React request form.
+    location /r/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host api.bankaci.app;
+        proxy_pass https://api.bankaci.app/v1/public/share/;
+    }
+
     # The landing page and future /admin UI use client-side routing.
     location / {
         try_files $uri $uri/ /index.html;

@@ -1,5 +1,11 @@
 # Bankacı: Kredi Hesaplama
 
+## Kamuya açık talep formu
+
+`/request/{requestId}` mobil uygulamadaki giriş yapmış Premium bankacının kalıcı bağlantısını açar. Form bankacının güncel profil adını, zorunlu telefonunu ve tercih edilmişse e-postasını gösterir. Müşteri kredi ve iletişim bilgileri, not ve en fazla beş belge gönderebilir; açık veri aktarım onayı zorunludur.
+
+Paylaşılan `/r/{requestId}` adresi Nginx üzerinden API'nin Open Graph çıktısına yönlendirilir. WhatsApp kart başlığı bankacının güncel profil adıyla `{Ad Soyad} | Kredi Talep Formu` biçiminde, açıklama ve 1200×630 `public/request-preview.png` görseli ise genel “Kredi talebinizi güvenle iletebilirsiniz” mesajıyla sunulur. Önizleme sonrasında tarayıcı `/request/{requestId}` formuna geçer. API ve web sürümleri birlikte deploy edilmelidir.
+
 Bankacı web projesi, mobil uygulamayı tanıtan SEO uyumlu landing page ile ileride kullanılacak `/admin` yönetim kabuğunu içerir. Önceki kredi hesaplama motoru kaynak kodda korunmaktadır ancak ana rotada sunulmaz.
 
 https://bankaci.app/
