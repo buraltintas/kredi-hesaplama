@@ -44,10 +44,16 @@ server {
         try_files $uri $uri/ /privacy/index.html =404;
     }
 
-    location /admin {
+    location = /admin {
         add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
-        try_files $uri $uri/ /index.html;
+        try_files /admin/index.html =404;
+    }
+
+    location /admin/ {
+        add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        try_files $uri /admin/index.html;
     }
 
     # Share-friendly request URLs. The API returns server-rendered Open Graph

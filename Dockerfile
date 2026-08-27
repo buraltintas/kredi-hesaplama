@@ -20,6 +20,12 @@ ENV PORT=8080
 COPY deploy/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Serve the admin SPA shell with a crawler-safe robots directive even before
+# React executes. This keeps /admin private from indexing-capable crawlers.
+RUN mkdir -p /usr/share/nginx/html/admin \
+  && sed 's/content="index, follow"/content="noindex, nofollow, noarchive"/' \
+    /usr/share/nginx/html/index.html > /usr/share/nginx/html/admin/index.html
+
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
