@@ -14,7 +14,9 @@ https://bankaci.app/
 
 - `/`: Bankacı mobil uygulama landing page'i
 - `/admin`: Env allowlist'indeki yönetici e-postasına gönderilen tek kullanımlık
-  kodla açılan, tokenı kalıcı tarayıcı depolamasına yazmayan yönetim alanı
+  kodla açılan, tokenı kalıcı tarayıcı depolamasına yazmayan yönetim alanı.
+  Giriş yüzeyi yalnızca `Bankacı Admin` başlığı, e-posta/kod alanı ve işlem
+  butonundan oluşur; yetki veya güvenlik ayrıntıları kullanıcıya gösterilmez.
 - `/privacy/`: KVKK aydınlatması; üyelik/OTP, profil ve public feed, RevenueCat
   Premium, push, reklam, GCS medya ve takma kimlikli hesaplama analitiğini kapsar
 
@@ -93,6 +95,17 @@ dağıtım ayarları:
 Entrypoint veya function target girilmez. `/admin` SPA fallback ile açılır;
 mevcut `/privacy/` sayfası ayrı statik belge olarak korunur. Sağlık kontrolü
 `/healthz` yolundadır.
+
+`/admin` için crawler güvenliği iki katmanlıdır: Nginx
+`X-Robots-Tag: noindex, nofollow, noarchive` döndürür ve Docker image build'i
+genel SPA kabuğundan ayrı, ham HTML'de de `noindex` bulunan
+`/admin/index.html` üretir. React'in runtime meta güncellemesi yalnız ek
+korumadır; tek başına noindex mekanizması olarak kabul edilmez.
+
+Admin tarayıcı isteklerinin çalışması için API Cloud Run revision'ında
+`WEB_ALLOWED_ORIGINS=https://bankaci.app,https://www.bankaci.app` bulunmalıdır.
+Production'da `Kod gönderilemedi` görülürse önce tarayıcı preflight/CORS ve bu
+env kontrol edilir; API'ye ulaşan yetkili istek normal durumda `202` döner.
 
 ## Teknik Notlar
 
