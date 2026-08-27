@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./RequestPage.module.css";
 
 const API_URL = (process.env.REACT_APP_BANKACI_API_URL || "https://api.bankaci.app").replace(/\/$/, "");
@@ -10,6 +10,54 @@ const loanTypes = [
 
 const digits = (value) => value.replace(/\D/g, "");
 const whatsappUrl = (phone) => `https://wa.me/${digits(phone)}`;
+
+function LoanTypeSelect({ value, onChange }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef(null);
+  const selectedLabel = loanTypes.find(([option]) => option === value)?.[1] || loanTypes[0][1];
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const closeOnOutsidePress = (event) => {
+      if (rootRef.current && !rootRef.current.contains(event.target)) setIsOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsidePress);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePress);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isOpen]);
+
+  return <div className={styles.loanTypeSelect} ref={rootRef}>
+    <button
+      aria-expanded={isOpen}
+      aria-haspopup="listbox"
+      aria-labelledby="loan-type-label loan-type-value"
+      className={styles.loanTypeTrigger}
+      onClick={() => setIsOpen((current) => !current)}
+      type="button"
+    >
+      <span id="loan-type-value">{selectedLabel}</span>
+      <span aria-hidden="true" className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`} />
+    </button>
+    {isOpen ? <div aria-labelledby="loan-type-label" className={styles.loanTypeMenu} role="listbox">
+      {loanTypes.map(([option, label]) => <button
+        aria-selected={option === value}
+        className={`${styles.loanTypeOption} ${option === value ? styles.loanTypeOptionSelected : ""}`}
+        key={option}
+        onClick={() => { onChange(option); setIsOpen(false); }}
+        role="option"
+        type="button"
+      >{label}</button>)}
+    </div> : null}
+  </div>;
+}
 
 function RequestFooter() {
   return <footer className={styles.footer}>
@@ -101,7 +149,7 @@ function RequestPage({ requestId }) {
       <div className={styles.notice}><strong>Bilgilendirme</strong><p>Bu formdaki iletişim ve talep bilgileriniz yukarıda bilgileri bulunan kişiye iletilir. Talebi alan kişi sizinle talebiniz hakkında iletişime geçebilir ve bağımsız veri sorumlusu olarak hareket eder.</p></div>
       <label>Ad soyad<input required minLength="2" maxLength="120" autoComplete="name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} /></label>
       <div className={styles.grid}><label>Telefon<input required inputMode="tel" autoComplete="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} /></label><label>E-posta <small>(isteğe bağlı)</small><input type="email" autoComplete="email" value={form.email} onChange={(e) => update("email", e.target.value)} /></label></div>
-      <label>Kredi türü<select value={form.loanType} onChange={(e) => update("loanType", e.target.value)}>{loanTypes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+      <div className={styles.field}><span className={styles.fieldLabel} id="loan-type-label">Kredi türü</span><LoanTypeSelect value={form.loanType} onChange={(value) => update("loanType", value)} /></div>
       <div className={styles.grid}><label>Talep edilen tutar (TL)<input required min="1" max="1000000000" step="0.01" type="number" inputMode="decimal" value={form.amount} onChange={(e) => update("amount", e.target.value)} /></label><label>Vade (ay)<input required min="1" max="360" type="number" inputMode="numeric" value={form.termMonths} onChange={(e) => update("termMonths", e.target.value)} /></label></div>
       <label>Not <small>(isteğe bağlı)</small><textarea maxLength="2000" rows="4" value={form.notes} onChange={(e) => update("notes", e.target.value)} /></label>
       <label>Belgeler <small>(isteğe bağlı, en fazla 5 dosya)</small><input type="file" accept="application/pdf,image/jpeg,image/png" multiple onChange={(e) => setFiles(Array.from(e.target.files || []).slice(0, 5))} /><span className={styles.hint}>PDF, JPG veya PNG · Dosya başına en fazla 6 MB</span></label>
