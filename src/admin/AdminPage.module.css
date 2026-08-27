@@ -41,17 +41,24 @@
 .brand img { width: 38px; height: 38px; border-radius: 11px; }
 .adminShell nav { display: grid; gap: 5px; margin-top: 45px; }
 
-.adminShell nav span {
+.adminShell nav button {
+  width: 100%;
   min-height: 43px;
   display: flex;
   align-items: center;
+  border: 0;
   border-radius: 9px;
+  background: transparent;
   color: #8a95a8;
+  cursor: pointer;
+  font: inherit;
   font-size: 13px;
   font-weight: 800;
+  text-align: left;
   padding: 0 13px;
   opacity: .58;
 }
+.adminShell nav button:hover { opacity: .85; }
 
 .adminShell nav .active { background: #eaf3ff; color: #1479f2; opacity: 1; }
 .adminShell aside > small { margin-top: auto; color: #9aa5b7; font-size: 10px; padding: 0 13px; }
@@ -85,3 +92,44 @@
   .adminShell aside nav, .adminShell aside > small { display: none; }
   .adminShell main { padding: 24px 18px; }
 }
+
+.panel {
+  margin-top: 30px;
+  border: 1px solid #dce4f1;
+  border-radius: 16px;
+  background: #fff;
+  padding: 28px;
+}
+.panel h2 { margin: 0 0 6px; font-size: 20px; letter-spacing: -.02em; }
+.panelHint { margin: 0 0 20px; max-width: 560px; color: #6c788e; font-size: 13px; line-height: 1.6; }
+.form { display: grid; gap: 16px; max-width: 560px; }
+.field { display: grid; gap: 6px; }
+.field > span { color: #526079; font-size: 12px; font-weight: 800; }
+.field input, .field textarea {
+  box-sizing: border-box;
+  min-height: 48px;
+  border: 1px solid #d6dfec;
+  border-radius: 10px;
+  color: #111c36;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 650;
+  outline: none;
+  padding: 12px 14px;
+  resize: vertical;
+}
+.field input:focus, .field textarea:focus { border-color: #1479f2; box-shadow: 0 0 0 3px rgba(20,121,242,.12); }
+.form > button {
+  justify-self: start;
+  min-height: 46px;
+  border: 0;
+  border-radius: 10px;
+  background: #1479f2;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 0 22px;
+}
+.form > button:disabled { cursor: not-allowed; opacity: .5; }
+.success { border-radius: 8px; background: #eafaf0; color: #1c7a45; font-size: 12px; font-weight: 700; padding: 10px; }
