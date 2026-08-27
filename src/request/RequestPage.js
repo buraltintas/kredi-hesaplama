@@ -93,8 +93,7 @@ function RequestPage({ requestId }) {
     <section className={styles.hero}>
       <h1>{link.label}</h1>
       <div className={styles.banker}>
-        {link.banker.avatarUrl ? <img src={link.banker.avatarUrl} alt="" /> : <div className={styles.avatar}>{link.banker.displayName.slice(0, 1).toUpperCase()}</div>}
-        <div><strong>{link.banker.displayName}</strong><span>{[link.banker.bankName, link.banker.jobTitle].filter(Boolean).join(" · ") || "Kredi danışmanı"}</span></div>
+        <strong>{link.banker.displayName}</strong>
       </div>
       <div className={styles.contactRow}><a href={`tel:${link.banker.phone}`}>Ara</a>{whatsapp && <a href={whatsapp} target="_blank" rel="noreferrer">WhatsApp</a>}{link.banker.email && <a href={`mailto:${link.banker.email}`}>E-posta</a>}</div>
     </section>
