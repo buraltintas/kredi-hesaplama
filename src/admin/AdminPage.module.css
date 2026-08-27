@@ -7,18 +7,13 @@
 }
 
 .loginShell { min-height: 100vh; display: grid; place-items: center; background: radial-gradient(circle at top, #eaf3ff, #f5f7fb 55%); padding: 24px; color: #111c36; }
-.loginCard { width: min(440px, 100%); box-sizing: border-box; border: 1px solid #dce4f1; border-radius: 20px; background: #fff; box-shadow: 0 24px 65px rgba(17,28,54,.14); padding: 32px; }
-.secureBadge { display: block; width: fit-content; margin-top: 34px; border-radius: 30px; background: #eaf3ff; color: #1479f2; font-size: 10px; font-weight: 900; letter-spacing: .08em; padding: 8px 11px; text-transform: uppercase; }
-.loginCard h1 { margin: 16px 0 8px; font-size: 34px; letter-spacing: -.04em; }
-.loginCard > p { margin: 0; color: #6c788e; font-size: 14px; line-height: 1.6; }
-.loginCard form { display: grid; gap: 10px; margin-top: 26px; }
-.loginCard label { font-size: 12px; font-weight: 850; }
+.loginCard { width: min(400px, 100%); box-sizing: border-box; border: 1px solid #dce4f1; border-radius: 20px; background: #fff; box-shadow: 0 24px 65px rgba(17,28,54,.14); padding: 32px; }
+.loginCard h1 { margin: 0 0 24px; font-size: 32px; letter-spacing: -.04em; }
+.loginCard form { display: grid; gap: 12px; }
 .loginCard input { min-height: 52px; box-sizing: border-box; border: 1px solid #d6dfec; border-radius: 10px; color: #111c36; font: inherit; font-size: 16px; font-weight: 750; outline: none; padding: 0 14px; }
 .loginCard input:focus { border-color: #1479f2; box-shadow: 0 0 0 3px rgba(20,121,242,.12); }
 .loginCard form > button { min-height: 50px; border: 0; border-radius: 10px; background: #1479f2; color: #fff; cursor: pointer; font-size: 14px; font-weight: 900; }
 .loginCard form > button:disabled { cursor: wait; opacity: .55; }
-.loginCard form > .linkButton { min-height: 40px; background: transparent; color: #1479f2; }
-.loginCard > small { display: block; margin-top: 22px; color: #8a95a8; font-size: 11px; line-height: 1.5; }
 .error { border-radius: 8px; background: #fff0f0; color: #ad2525; font-size: 12px; font-weight: 700; padding: 10px; }
 .logout { margin-top: auto; min-height: 42px; border: 1px solid #d6dfec; border-radius: 9px; background: #fff; color: #526079; cursor: pointer; font-weight: 800; }
 
