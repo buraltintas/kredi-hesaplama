@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kredi Talep Formu</title>
+    <meta name="description" content="Kredi talebinizi güvenle iletebilirsiniz." />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+
+    <!--
+      Link-preview page for shared credit-request links (/request/<token>).
+
+      The shared URL is /r/<token>, which the API answers with a per-banker Open
+      Graph card and then redirects (http-equiv="refresh") to /request/<token>.
+      Facebook's / WhatsApp's crawler follows that refresh and scrapes the
+      destination, so the destination must carry the request-form preview.
+      The SPA index.html only has the homepage Open Graph tags, so .htaccess
+      serves this file to social crawlers instead. Real visitors still get the
+      app (index.html). The per-banker name lives only in the API response and
+      cannot be reproduced statically, so the title here is generic.
+
+      This page must NOT server-redirect (no http-equiv refresh): the crawler
+      would follow it away and lose this preview. The JS redirect below only
+      runs for a stray human, whom the crawler-only .htaccess rule never sends
+      here anyway.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Bankacı" />
+    <meta property="og:title" content="Kredi Talep Formu" />
+    <meta
+      property="og:description"
+      content="Kredi talebinizi güvenle iletebilirsiniz."
+    />
+    <meta property="og:image" content="https://bankaci.app/request-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kredi Talep Formu" />
+    <meta
+      name="twitter:description"
+      content="Kredi talebinizi güvenle iletebilirsiniz."
+    />
+    <meta name="twitter:image" content="https://bankaci.app/request-preview.png" />
+  </head>
+  <body>
+    <p>
+      Kredi talep formunu açmak için
+      <a href="/" id="open">buraya dokunun</a>.
+    </p>
+    <script>
+      // A crawler never reaches this file (the .htaccess rule targets crawler
+      // user-agents only). If a real person opens it directly, send them to the
+      // app. This runs in a browser only; link-preview crawlers do not execute
+      // JS, so it cannot redirect them away from the preview above.
+      (function () {
+        var path = window.location.pathname || "";
+        window.location.replace(path.indexOf("/request/") === 0 ? path : "/");
+      })();
+    </script>
+  </body>
+</html>

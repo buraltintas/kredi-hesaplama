@@ -1,9 +1,19 @@
 RewriteEngine On
 
-# Existing static pages such as /privacy/ must keep serving their own files.
+# Existing static pages such as /privacy/ and /account-deletion/ must keep
+# serving their own files.
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Client-side route used by the future admin shell.
+# Link-preview crawlers that open a shared credit-request link land on
+# /request/<token> — the shared /r/<token> URL redirects there, and the form is
+# also reachable at /request/<token> directly. The SPA index.html only carries
+# the homepage Open Graph tags, so those crawlers would otherwise preview the
+# homepage. Serve them a static request-form card (image + "Kredi Talep Formu")
+# instead. Real visitors (every other user agent) still get the app below.
+RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|Facebot|WhatsApp|Twitterbot|LinkedInBot|TelegramBot|Slackbot|Discordbot|Applebot|Pinterest|redditbot|vkShare|SkypeUriPreview) [NC]
+RewriteRule ^request/ request-share.html [L]
+
+# Client-side route used by the app shell.
 RewriteRule ^ index.html [L]
