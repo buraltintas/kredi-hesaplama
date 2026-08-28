@@ -1,29 +1,32 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import trLabels from "react-phone-number-input/locale/tr";
-import "react-phone-number-input/style.css";
-import styles from "./RequestPage.module.css";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import trLabels from 'react-phone-number-input/locale/tr';
+import 'react-phone-number-input/style.css';
+import styles from './RequestPage.module.css';
 
-const API_URL = (process.env.REACT_APP_BANKACI_API_URL || "https://api.bankaci.app").replace(/\/$/, "");
+const API_URL = (
+  process.env.REACT_APP_BANKACI_API_URL || 'https://api.bankaci.app'
+).replace(/\/$/, '');
 const loanTypes = [
-  ["consumer", "İhtiyaç / Taşıt Kredisi"],
-  ["housing", "Konut Kredisi"],
-  ["commercial", "Ticari Kredi"],
+  ['consumer', 'İhtiyaç / Taşıt Kredisi'],
+  ['housing', 'Konut Kredisi'],
+  ['commercial', 'Ticari Kredi'],
 ];
 
-const digits = (value) => value.replace(/\D/g, "");
+const digits = (value) => value.replace(/\D/g, '');
 // The amount is stored as raw digits ("200000") so it survives the backend's
 // ParseFloat unchanged; this only groups it for display ("200.000"). A dot is
 // the Turkish thousands separator, never a decimal, so it is display-only and
 // never reaches the stored value or the request body.
 const groupThousands = (raw) =>
-  raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
+  raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
 const whatsappNumber = (phone) => {
   const normalized = phone.trim();
   const number = digits(normalized);
-  if (normalized.startsWith("+")) return number;
-  if (number.startsWith("00")) return number.slice(2);
-  if (number.startsWith("0") && number.length === 11) return `90${number.slice(1)}`;
+  if (normalized.startsWith('+')) return number;
+  if (number.startsWith('00')) return number.slice(2);
+  if (number.startsWith('0') && number.length === 11)
+    return `90${number.slice(1)}`;
   if (number.length === 10) return `90${number}`;
   return number;
 };
@@ -32,59 +35,79 @@ const whatsappUrl = (phone) => `https://wa.me/${whatsappNumber(phone)}`;
 function LoanTypeSelect({ value, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef(null);
-  const selectedLabel = loanTypes.find(([option]) => option === value)?.[1] || loanTypes[0][1];
+  const selectedLabel =
+    loanTypes.find(([option]) => option === value)?.[1] || loanTypes[0][1];
 
   useEffect(() => {
     if (!isOpen) return undefined;
 
     const closeOnOutsidePress = (event) => {
-      if (rootRef.current && !rootRef.current.contains(event.target)) setIsOpen(false);
+      if (rootRef.current && !rootRef.current.contains(event.target))
+        setIsOpen(false);
     };
     const closeOnEscape = (event) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key === 'Escape') setIsOpen(false);
     };
 
-    document.addEventListener("pointerdown", closeOnOutsidePress);
-    document.addEventListener("keydown", closeOnEscape);
+    document.addEventListener('pointerdown', closeOnOutsidePress);
+    document.addEventListener('keydown', closeOnEscape);
     return () => {
-      document.removeEventListener("pointerdown", closeOnOutsidePress);
-      document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener('pointerdown', closeOnOutsidePress);
+      document.removeEventListener('keydown', closeOnEscape);
     };
   }, [isOpen]);
 
-  return <div className={styles.loanTypeSelect} ref={rootRef}>
-    <button
-      aria-expanded={isOpen}
-      aria-haspopup="listbox"
-      aria-labelledby="loan-type-label loan-type-value"
-      className={styles.loanTypeTrigger}
-      onClick={() => setIsOpen((current) => !current)}
-      type="button"
-    >
-      <span id="loan-type-value">{selectedLabel}</span>
-      <span aria-hidden="true" className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`} />
-    </button>
-    {isOpen ? <div aria-labelledby="loan-type-label" className={styles.loanTypeMenu} role="listbox">
-      {loanTypes.map(([option, label]) => <button
-        aria-selected={option === value}
-        className={`${styles.loanTypeOption} ${option === value ? styles.loanTypeOptionSelected : ""}`}
-        key={option}
-        onClick={() => { onChange(option); setIsOpen(false); }}
-        role="option"
-        type="button"
-      >{label}</button>)}
-    </div> : null}
-  </div>;
+  return (
+    <div className={styles.loanTypeSelect} ref={rootRef}>
+      <button
+        aria-expanded={isOpen}
+        aria-haspopup='listbox'
+        aria-labelledby='loan-type-label loan-type-value'
+        className={styles.loanTypeTrigger}
+        onClick={() => setIsOpen((current) => !current)}
+        type='button'
+      >
+        <span id='loan-type-value'>{selectedLabel}</span>
+        <span
+          aria-hidden='true'
+          className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
+        />
+      </button>
+      {isOpen ? (
+        <div
+          aria-labelledby='loan-type-label'
+          className={styles.loanTypeMenu}
+          role='listbox'
+        >
+          {loanTypes.map(([option, label]) => (
+            <button
+              aria-selected={option === value}
+              className={`${styles.loanTypeOption} ${option === value ? styles.loanTypeOptionSelected : ''}`}
+              key={option}
+              onClick={() => {
+                onChange(option);
+                setIsOpen(false);
+              }}
+              role='option'
+              type='button'
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 const formatFileSize = (bytes) => {
   if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1).replace(".", ",")} MB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`;
 };
 
 function SelectedFile({ file, onRemove }) {
-  const [previewUrl, setPreviewUrl] = useState("");
-  const isImage = file.type === "image/jpeg" || file.type === "image/png";
+  const [previewUrl, setPreviewUrl] = useState('');
+  const isImage = file.type === 'image/jpeg' || file.type === 'image/png';
 
   useEffect(() => {
     if (!isImage) return undefined;
@@ -93,139 +116,409 @@ function SelectedFile({ file, onRemove }) {
     return () => URL.revokeObjectURL(objectUrl);
   }, [file, isImage]);
 
-  return <div className={styles.selectedFile}>
-    {previewUrl ? <img className={styles.filePreview} src={previewUrl} alt="" /> : <div className={styles.pdfPreview}>PDF</div>}
-    <div className={styles.fileInfo}><strong title={file.name}>{file.name}</strong><span>{formatFileSize(file.size)}</span></div>
-    <button aria-label={`${file.name} dosyasını kaldır`} className={styles.removeFile} onClick={onRemove} type="button">×</button>
-  </div>;
+  return (
+    <div className={styles.selectedFile}>
+      {previewUrl ? (
+        <img className={styles.filePreview} src={previewUrl} alt='' />
+      ) : (
+        <div className={styles.pdfPreview}>PDF</div>
+      )}
+      <div className={styles.fileInfo}>
+        <strong title={file.name}>{file.name}</strong>
+        <span>{formatFileSize(file.size)}</span>
+      </div>
+      <button
+        aria-label={`${file.name} dosyasını kaldır`}
+        className={styles.removeFile}
+        onClick={onRemove}
+        type='button'
+      >
+        ×
+      </button>
+    </div>
+  );
 }
 
 function RequestFooter() {
-  return <footer className={styles.footer}>
-    <a className={styles.footerBrand} href="https://bankaci.app" aria-label="Bankacı Premium ana sayfa">
-      <img src="/icon.png" alt="" />
-      <span><strong>Bankacı Premium</strong><small>bankaci.app</small></span>
-    </a>
-  </footer>;
+  return (
+    <footer className={styles.footer}>
+      <a
+        className={styles.footerBrand}
+        href='https://bankaci.app'
+        aria-label='Bankacı Premium ana sayfa'
+      >
+        <img src='/icon.png' alt='' />
+        <span>
+          <strong>Bankacı Premium</strong>
+          <small>bankaci.app</small>
+        </span>
+      </a>
+    </footer>
+  );
 }
 
 function RequestState({ children }) {
-  return <main className={styles.statePage}>
-    <div className={styles.stateContent}>{children}</div>
-    <RequestFooter />
-  </main>;
+  return (
+    <main className={styles.statePage}>
+      <div className={styles.stateContent}>{children}</div>
+      <RequestFooter />
+    </main>
+  );
 }
 
 function RequestPage({ requestId }) {
   const [link, setLink] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
-  const [form, setForm] = useState({ fullName: "", phone: "", email: "", loanType: "consumer", amount: "", termMonths: "", notes: "", consent: false });
+  const [form, setForm] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    loanType: 'consumer',
+    amount: '',
+    termMonths: '',
+    notes: '',
+    consent: false,
+  });
 
   useEffect(() => {
-    document.title = "Kredi Talep Formu";
+    document.title = 'Kredi Talep Formu';
     let robots = document.querySelector('meta[name="robots"]');
-    if (!robots) { robots = document.createElement("meta"); robots.name = "robots"; document.head.appendChild(robots); }
-    robots.content = "noindex,nofollow,noarchive";
-    fetch(`${API_URL}/v1/public/request-links/${encodeURIComponent(requestId)}`, { headers: { Accept: "application/json" } })
+    if (!robots) {
+      robots = document.createElement('meta');
+      robots.name = 'robots';
+      document.head.appendChild(robots);
+    }
+    robots.content = 'noindex,nofollow,noarchive';
+    fetch(
+      `${API_URL}/v1/public/request-links/${encodeURIComponent(requestId)}`,
+      { headers: { Accept: 'application/json' } },
+    )
       .then(async (response) => {
-        if (!response.ok) throw new Error("unavailable");
+        if (!response.ok) throw new Error('unavailable');
         return response.json();
       })
       .then((payload) => {
         setLink(payload);
         document.title = `${payload.banker.displayName} | Kredi Talep Formu`;
-        setForm((current) => ({ ...current, loanType: payload.defaultLoanType || "consumer" }));
+        setForm((current) => ({
+          ...current,
+          loanType: payload.defaultLoanType || 'consumer',
+        }));
       })
-      .catch(() => setError("Bu talep bağlantısı şu anda kullanıma kapalı olabilir."))
+      .catch(() =>
+        setError('Bu talep bağlantısı şu anda kullanıma kapalı olabilir.'),
+      )
       .finally(() => setLoading(false));
   }, [requestId]);
 
-  const whatsapp = useMemo(() => link?.banker?.phone ? whatsappUrl(link.banker.phone) : "", [link]);
-  const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+  const whatsapp = useMemo(
+    () => (link?.banker?.phone ? whatsappUrl(link.banker.phone) : ''),
+    [link],
+  );
+  const update = (key, value) =>
+    setForm((current) => ({ ...current, [key]: value }));
   const addFiles = (selectedFiles) => {
     setFiles((current) => {
-      const uniqueFiles = [...current, ...selectedFiles].filter((file, index, list) =>
-        list.findIndex((candidate) => candidate.name === file.name && candidate.size === file.size && candidate.lastModified === file.lastModified) === index
+      const uniqueFiles = [...current, ...selectedFiles].filter(
+        (file, index, list) =>
+          list.findIndex(
+            (candidate) =>
+              candidate.name === file.name &&
+              candidate.size === file.size &&
+              candidate.lastModified === file.lastModified,
+          ) === index,
       );
       return uniqueFiles.slice(0, 5);
     });
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
-  const removeFile = (index) => setFiles((current) => current.filter((_, fileIndex) => fileIndex !== index));
+  const removeFile = (index) =>
+    setFiles((current) =>
+      current.filter((_, fileIndex) => fileIndex !== index),
+    );
 
   const submit = async (event) => {
     event.preventDefault();
-    setError("");
-    if (!form.phone || !isValidPhoneNumber(form.phone)) { setError("Geçerli bir telefon numarası yazın."); return; }
-    if (!form.consent) { setError("Talebinizi iletmek için veri aktarım onayını işaretleyin."); return; }
+    setError('');
+    if (!form.phone || !isValidPhoneNumber(form.phone)) {
+      setError('Geçerli bir telefon numarası yazın.');
+      return;
+    }
+    if (!form.consent) {
+      setError('Talebinizi iletmek için veri aktarım onayını işaretleyin.');
+      return;
+    }
     setBusy(true);
     try {
       const documentUrls = [];
       for (const file of files) {
         const body = new FormData();
-        body.append("document", file);
-        const response = await fetch(`${API_URL}/v1/public/request-links/${encodeURIComponent(requestId)}/documents`, { method: "POST", body });
-        if (!response.ok) throw new Error("document");
+        body.append('document', file);
+        const response = await fetch(
+          `${API_URL}/v1/public/request-links/${encodeURIComponent(requestId)}/documents`,
+          { method: 'POST', body },
+        );
+        if (!response.ok) throw new Error('document');
         const payload = await response.json();
         documentUrls.push(payload.objectName);
       }
-      const response = await fetch(`${API_URL}/v1/public/request-links/${encodeURIComponent(requestId)}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ ...form, email: form.email.trim() || null, termMonths: Number(form.termMonths), documentUrls }),
-      });
-      if (!response.ok) throw new Error("submit");
+      const response = await fetch(
+        `${API_URL}/v1/public/request-links/${encodeURIComponent(requestId)}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            ...form,
+            email: form.email.trim() || null,
+            termMonths: Number(form.termMonths),
+            documentUrls,
+          }),
+        },
+      );
+      if (!response.ok) throw new Error('submit');
       setSubmitted(true);
     } catch (reason) {
-      setError(reason.message === "document" ? "Belge yüklenemedi. PDF, JPG veya PNG biçiminde ve 6 MB'dan küçük dosyalar seçin." : "Talep iletilemedi. Bilgileri ve bağlantınızı kontrol edip tekrar deneyin.");
-    } finally { setBusy(false); }
+      setError(
+        reason.message === 'document'
+          ? "Belge yüklenemedi. PDF, JPG veya PNG biçiminde ve 6 MB'dan küçük dosyalar seçin."
+          : 'Talep iletilemedi. Bilgileri ve bağlantınızı kontrol edip tekrar deneyin.',
+      );
+    } finally {
+      setBusy(false);
+    }
   };
 
-  if (loading) return <RequestState><div className={styles.loadingMark}><span /><span /><span /></div><h1>Talep formu hazırlanıyor</h1><p>Bağlantı ve iletişim bilgileri güvenli şekilde yükleniyor.</p></RequestState>;
-  if (error && !link) return <RequestState><div className={styles.errorMark}>!</div><h1>Bağlantı kullanılamıyor</h1><p>{error}</p></RequestState>;
-  if (submitted) return <RequestState><div className={styles.success}>✓</div><h1>Talebiniz iletildi</h1><p>{link.banker.displayName}, talebiniz hakkında sizinle iletişime geçebilir.</p>{whatsapp && <a className={styles.whatsapp} href={whatsapp} target="_blank" rel="noreferrer">WhatsApp’tan görüş</a>}</RequestState>;
+  if (loading)
+    return (
+      <RequestState>
+        <div className={styles.loadingMark}>
+          <span />
+          <span />
+          <span />
+        </div>
+        <h1>Talep formu hazırlanıyor</h1>
+        <p>Bağlantı ve iletişim bilgileri güvenli şekilde yükleniyor.</p>
+      </RequestState>
+    );
+  if (error && !link)
+    return (
+      <RequestState>
+        <div className={styles.errorMark}>!</div>
+        <h1>Bağlantı kullanılamıyor</h1>
+        <p>{error}</p>
+      </RequestState>
+    );
+  if (submitted)
+    return (
+      <RequestState>
+        <div className={styles.success}>✓</div>
+        <h1>Talebiniz iletildi</h1>
+        <p>
+          {link.banker.displayName}, talebiniz hakkında sizinle iletişime
+          geçebilir.
+        </p>
+        {whatsapp && (
+          <a
+            className={styles.whatsapp}
+            href={whatsapp}
+            target='_blank'
+            rel='noreferrer'
+          >
+            WhatsApp’tan görüş
+          </a>
+        )}
+      </RequestState>
+    );
 
-  return <main className={styles.page}>
-    <section className={styles.hero}>
-      <h1>{link.label}</h1>
-      <div className={styles.banker}>
-        <strong>{link.banker.displayName}</strong>
-        <div className={styles.contactDetails}>
-          <span>{link.banker.phone}</span>
-          {link.banker.email ? <span>{link.banker.email}</span> : null}
+  return (
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <h1>{link.label}</h1>
+        <div className={styles.banker}>
+          <strong>{link.banker.displayName}</strong>
+          <div className={styles.contactDetails}>
+            <span>{link.banker.phone}</span>
+            {link.banker.email ? <span>{link.banker.email}</span> : null}
+          </div>
         </div>
-      </div>
-      <div className={styles.contactRow}><a href={`tel:${link.banker.phone}`}>Ara</a>{whatsapp && <a href={whatsapp} target="_blank" rel="noreferrer">WhatsApp</a>}{link.banker.email && <a href={`mailto:${link.banker.email}`}>E-posta</a>}</div>
-    </section>
-    <form className={styles.form} onSubmit={submit}>
-      <div className={styles.notice}><strong>Bilgilendirme</strong><p>Bu formdaki iletişim ve talep bilgileriniz yukarıda bilgileri bulunan kişiye iletilir. Talebi alan kişi sizinle talebiniz hakkında iletişime geçebilir ve bağımsız veri sorumlusu olarak hareket eder.</p></div>
-      <label>Ad soyad<input required minLength="2" maxLength="120" autoComplete="name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} /></label>
-      <div className={styles.grid}><label>Telefon<PhoneInput className={styles.phoneInput} defaultCountry="TR" international labels={trLabels} limitMaxLength countryCallingCodeEditable={false} autoComplete="tel" value={form.phone || undefined} onChange={(value) => update("phone", value || "")} /></label><label>E-posta <small>(isteğe bağlı)</small><input type="email" autoComplete="email" value={form.email} onChange={(e) => update("email", e.target.value)} /></label></div>
-      <div className={styles.field}><span className={styles.fieldLabel} id="loan-type-label">Kredi türü</span><LoanTypeSelect value={form.loanType} onChange={(value) => update("loanType", value)} /></div>
-      <div className={styles.grid}><label>Talep edilen tutar (TL)<input required inputMode="numeric" autoComplete="off" value={groupThousands(form.amount)} onChange={(e) => update("amount", digits(e.target.value).slice(0, 10))} /></label><label>Vade (ay)<input required min="1" max="360" type="number" inputMode="numeric" value={form.termMonths} onChange={(e) => update("termMonths", e.target.value)} /></label></div>
-      <label>Not <small>(isteğe bağlı)</small><textarea maxLength="2000" rows="4" value={form.notes} onChange={(e) => update("notes", e.target.value)} /></label>
-      <div className={styles.field}>
-        <span className={styles.fieldLabel}>Belgeler <small>(isteğe bağlı, en fazla 5 dosya)</small></span>
-        <div className={styles.filePicker}>
-          <input id="request-documents" ref={fileInputRef} className={styles.fileInput} type="file" accept="application/pdf,image/jpeg,image/png" multiple onChange={(e) => addFiles(Array.from(e.target.files || []))} />
-          <label className={styles.filePickerButton} htmlFor="request-documents">Belge seç</label>
-          <span>{files.length ? `${files.length} / 5 dosya seçildi` : "Henüz dosya seçilmedi"}</span>
+        <div className={styles.contactRow}>
+          <a href={`tel:${link.banker.phone}`}>Ara</a>
+          {whatsapp && (
+            <a href={whatsapp} target='_blank' rel='noreferrer'>
+              WhatsApp
+            </a>
+          )}
+          {link.banker.email && (
+            <a href={`mailto:${link.banker.email}`}>E-posta</a>
+          )}
         </div>
-        {files.length ? <div className={styles.selectedFiles}>{files.map((file, index) => <SelectedFile file={file} key={`${file.name}-${file.size}-${file.lastModified}`} onRemove={() => removeFile(index)} />)}</div> : null}
-        <span className={styles.hint}>PDF, JPG veya PNG · Dosya başına en fazla 6 MB</span>
-      </div>
-      <label className={styles.consent}><input type="checkbox" checked={form.consent} onChange={(e) => update("consent", e.target.checked)} /><span>Girdiğim bilgilerin ve eklediğim belgelerin talep değerlendirmesi ve benimle iletişim kurulması amacıyla form sahibine iletilmesini kabul ediyorum.</span></label>
-      {error && <div className={styles.error}>{error}</div>}
-      <button disabled={busy} type="submit">{busy ? "Talebiniz iletiliyor…" : "Talebi ilet"}</button>
-      <p className={styles.privacy}>İletişim verileri anonim istatistiklere dahil edilmez. Kredi türü, tutar ve vade gibi kişisel kimlik içermeyen özetler hizmet istatistiklerinde kullanılabilir. <a href="/privacy" target="_blank">Gizlilik politikasını inceleyin.</a></p>
-    </form>
-    <RequestFooter />
-  </main>;
+      </section>
+      <form className={styles.form} onSubmit={submit}>
+        <div className={styles.notice}>
+          <strong>Bilgilendirme</strong>
+          <p>
+            Bu formdaki iletişim ve talep bilgileriniz yukarıda bilgileri
+            bulunan kişiye iletilir. Talebi alan kişi sizinle talebiniz hakkında
+            iletişime geçebilir ve bağımsız veri sorumlusu olarak hareket eder.
+          </p>
+        </div>
+        <label>
+          Ad soyad
+          <input
+            required
+            minLength='2'
+            maxLength='120'
+            autoComplete='name'
+            value={form.fullName}
+            onChange={(e) => update('fullName', e.target.value)}
+          />
+        </label>
+        <div className={styles.grid}>
+          <label>
+            Telefon
+            <PhoneInput
+              className={styles.phoneInput}
+              defaultCountry='TR'
+              international
+              labels={trLabels}
+              limitMaxLength
+              countryCallingCodeEditable={false}
+              autoComplete='tel'
+              value={form.phone || undefined}
+              onChange={(value) => update('phone', value || '')}
+            />
+          </label>
+          <label>
+            E-posta <small>(isteğe bağlı)</small>
+            <input
+              type='email'
+              autoComplete='email'
+              value={form.email}
+              onChange={(e) => update('email', e.target.value)}
+            />
+          </label>
+        </div>
+        <div className={styles.field}>
+          <span className={styles.fieldLabel} id='loan-type-label'>
+            Kredi türü
+          </span>
+          <LoanTypeSelect
+            value={form.loanType}
+            onChange={(value) => update('loanType', value)}
+          />
+        </div>
+        <div className={styles.grid}>
+          <label>
+            Talep edilen tutar (TL)
+            <input
+              required
+              inputMode='numeric'
+              autoComplete='off'
+              value={groupThousands(form.amount)}
+              onChange={(e) =>
+                update('amount', digits(e.target.value).slice(0, 10))
+              }
+            />
+          </label>
+          <label>
+            Vade (ay)
+            <input
+              required
+              min='1'
+              max='360'
+              type='number'
+              inputMode='numeric'
+              value={form.termMonths}
+              onChange={(e) => update('termMonths', e.target.value)}
+            />
+          </label>
+        </div>
+        <label>
+          Not <small>(isteğe bağlı)</small>
+          <textarea
+            maxLength='2000'
+            rows='4'
+            value={form.notes}
+            onChange={(e) => update('notes', e.target.value)}
+          />
+        </label>
+        <div className={styles.field}>
+          <span className={styles.fieldLabel}>
+            Belgeler <small>(isteğe bağlı, en fazla 5 dosya)</small>
+          </span>
+          <div className={styles.filePicker}>
+            <input
+              id='request-documents'
+              ref={fileInputRef}
+              className={styles.fileInput}
+              type='file'
+              accept='application/pdf,image/jpeg,image/png'
+              multiple
+              onChange={(e) => addFiles(Array.from(e.target.files || []))}
+            />
+            <label
+              className={styles.filePickerButton}
+              htmlFor='request-documents'
+            >
+              Belge seç
+            </label>
+            <span>
+              {files.length
+                ? `${files.length} / 5 dosya seçildi`
+                : 'Henüz dosya seçilmedi'}
+            </span>
+          </div>
+          {files.length ? (
+            <div className={styles.selectedFiles}>
+              {files.map((file, index) => (
+                <SelectedFile
+                  file={file}
+                  key={`${file.name}-${file.size}-${file.lastModified}`}
+                  onRemove={() => removeFile(index)}
+                />
+              ))}
+            </div>
+          ) : null}
+          <span className={styles.hint}>
+            PDF, JPG veya PNG · Dosya başına en fazla 6 MB
+          </span>
+        </div>
+        <label className={styles.consent}>
+          <input
+            type='checkbox'
+            checked={form.consent}
+            onChange={(e) => update('consent', e.target.checked)}
+          />
+          <span>
+            Girdiğim bilgilerin ve eklediğim belgelerin talep değerlendirmesi ve
+            benimle iletişim kurulması amacıyla form sahibine iletilmesini kabul
+            ediyorum.
+          </span>
+        </label>
+        {error && <div className={styles.error}>{error}</div>}
+        <button disabled={busy} type='submit'>
+          {busy ? 'Talebiniz iletiliyor…' : 'Gönder'}
+        </button>
+        <p className={styles.privacy}>
+          İletişim verileri anonim istatistiklere dahil edilmez. Kredi türü,
+          tutar ve vade gibi kişisel kimlik içermeyen özetler hizmet
+          istatistiklerinde kullanılabilir.{' '}
+          <a href='/privacy/' target='_blank'>
+            Gizlilik politikasını inceleyin.
+          </a>
+        </p>
+      </form>
+      <RequestFooter />
+    </main>
+  );
 }
 
 export default RequestPage;
