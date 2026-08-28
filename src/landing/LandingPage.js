@@ -138,11 +138,6 @@ function LandingPage() {
           <img src="/icon.png" alt="" />
           <span>Bankacı</span>
         </a>
-        <nav aria-label="Ana menü">
-          <a href="#ozellikler">Özellikler</a>
-          <a href="#gelecek">Yakında</a>
-          <a href="https://burak-altintas.com" target="_blank" rel="noreferrer">İletişim</a>
-        </nav>
       </header>
 
       <main id="top">
@@ -156,9 +151,6 @@ function LandingPage() {
             </p>
             <div id="indir" className={styles.heroActions}>
               <StoreButtons />
-              <a className={styles.textLink} href="#ozellikler">
-                Neler yapar? <span>↓</span>
-              </a>
             </div>
           </div>
 

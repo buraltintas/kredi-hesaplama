@@ -52,9 +52,9 @@
 .featureGrid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 65px; border-top: 1px solid #dce4f1; border-left: 1px solid #dce4f1; }
 .featureGrid article { min-height: 260px; border-right: 1px solid #dce4f1; border-bottom: 1px solid #dce4f1; background: rgba(255,255,255,.54); padding: 28px; transition: background .2s ease, transform .2s ease; }
 .featureGrid article:hover { position: relative; z-index: 2; background: #fff; transform: translateY(-4px); box-shadow: 0 20px 45px rgba(26, 56, 104, .08); }
-.featureGrid article > span { color: #1479f2; font-size: 11px; font-weight: 900; }
-.featureGrid h3 { margin: 70px 0 12px; font-size: 21px; letter-spacing: -.025em; }
-.featureGrid p { margin: 0; color: #63708a; font-size: 14px; line-height: 1.65; }
+.featureGrid article > span { color: #1479f2; font-size: 12px; font-weight: 900; }
+.featureGrid h3 { margin: 70px 0 12px; font-size: 22px; letter-spacing: -.025em; }
+.featureGrid p { margin: 0; color: #63708a; font-size: 15px; line-height: 1.65; }
 
 .roadmapSection { padding: 120px max(20px, calc((100vw - 1180px) / 2)); display: grid; grid-template-columns: .9fr 1.1fr; gap: 100px; background: #111c36; color: #fff; }
 .roadmapCopy { align-self: start; position: sticky; top: 40px; }
