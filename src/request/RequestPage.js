@@ -346,7 +346,7 @@ function RequestPage({ requestId }) {
           <strong>{link.banker.displayName}</strong>
           <div className={styles.contactDetails}>
             <span>{link.banker.phone}</span>
-            {link.banker.email ? <span>{link.banker.email}</span> : null}
+            {/* Bankacı e-postası şimdilik gizli; ileride aç/kapa eklenecek. */}
           </div>
         </div>
         <div className={styles.contactRow}>
@@ -355,9 +355,6 @@ function RequestPage({ requestId }) {
             <a href={whatsapp} target='_blank' rel='noreferrer'>
               WhatsApp
             </a>
-          )}
-          {link.banker.email && (
-            <a href={`mailto:${link.banker.email}`}>E-posta</a>
           )}
         </div>
       </section>
