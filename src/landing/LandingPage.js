@@ -39,14 +39,39 @@ const currentFeatures = [
   },
 ];
 
-const roadmap = [
-  "Ticari bankacılık araçları: spot ve rotatif kredi, dönemsel ödeme ve iskonto hesaplamaları",
-  "Bankaların kredi ve mevduat kampanyaları",
-  "Kişiye özel yapay zekâ destekli ödeme planı",
-  "Bankacılar için profesyonel paylaşım akışı",
-  "Ana ekrandan hızlı hesaplama widget'ları",
-  "Paylaşılabilir kredi talep formları",
-  "Hesap ve Premium erişimini cihazlar arasında kullanma",
+// Every item here is a feature that ships today. `premium` marks the ones behind
+// the Bankacı Premium entitlement (see the app's premiumFeatures gates); the rest
+// are free. Nothing here is aspirational or "coming soon".
+const platformFeatures = [
+  {
+    title: "Kredi hesaplama ve sonucu anlaşılır şekilde paylaşma",
+    premium: false,
+  },
+  {
+    title: "Bireysel kredilerde 7 farklı ödeme planı",
+    premium: true,
+  },
+  {
+    title:
+      "Ticari bankacılık araçları: spot ve rotatif kredi, dönemsel ödeme ve iskonto hesaplamaları",
+    premium: false,
+  },
+  {
+    title: "Son 20 hesaplamayı görüntüleme",
+    premium: false,
+  },
+  {
+    title: "Öğle Arası'nda bankacı topluluğuyla profesyonel paylaşım",
+    premium: true,
+  },
+  {
+    title: "Paylaşılabilir kredi talep formları ve gelen talep yönetimi",
+    premium: true,
+  },
+  {
+    title: "Kişisel notlar ve paylaşılabilir hesaplama görselleri",
+    premium: true,
+  },
 ];
 
 const marqueeItems = [
@@ -184,20 +209,21 @@ function LandingPage() {
 
         <section className={styles.roadmapSection} id="gelecek">
           <div className={styles.roadmapCopy}>
-            <h2>Bankacının dijital çalışma alanına dönüşüyor.</h2>
+            <h2>Bankacının dijital çalışma alanı.</h2>
             <p>
-              Bankacı; bireysel ve ticari bankacılıkta fırsatları takip ettiğiniz,
+              Bankacı; bireysel ve ticari bankacılıkta hesaplamalarınızı yaptığınız,
               müşteriye özel senaryolar hazırladığınız ve meslektaşlarınızla bağlantı
-              kurduğunuz kapsamlı bir çalışma platformuna evriliyor.
+              kurduğunuz kapsamlı bir çalışma platformu.
             </p>
-            <span className={styles.mobileRoadmapBadge}>Yakında</span>
           </div>
           <div className={styles.roadmapList}>
-            {roadmap.map((item, index) => (
-              <div key={item}>
+            {platformFeatures.map((item, index) => (
+              <div key={item.title}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>{item}</p>
-                <i>Yakında</i>
+                <p>{item.title}</p>
+                {item.premium ? (
+                  <i className={styles.roadmapPremium}>BANKACI PREMIUM</i>
+                ) : null}
               </div>
             ))}
           </div>
@@ -205,12 +231,12 @@ function LandingPage() {
 
         <section className={styles.premiumSection}>
           <div>
-            <span className={styles.premiumBadge}>PREMIUM BANKACI</span>
+            <span className={styles.premiumBadge}>BANKACI PREMIUM</span>
             <h2>Kesintisiz çalışın.<br />Daha fazlasını yapın.</h2>
           </div>
           <p>
-            Reklamsız deneyim, gelişmiş hesaplamalar ve yakında gelecek profesyonel
-            özellikler Premium Bankacı ile tek yerde.
+            Reklamsız deneyim, gelişmiş hesaplamalar ve profesyonel çalışma
+            özellikleri Bankacı Premium ile tek yerde.
           </p>
         </section>
 

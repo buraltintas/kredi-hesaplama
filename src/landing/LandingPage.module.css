@@ -64,7 +64,7 @@
 .roadmapList > div { min-height: 87px; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,.14); }
 .roadmapList span { color: #7eafff; font-size: 11px; font-weight: 900; }
 .roadmapList p { font-size: 17px; font-weight: 750; }
-.roadmapList i { border: 1px solid rgba(255,255,255,.18); border-radius: 20px; color: #aebbd0; font-size: 10px; font-style: normal; font-weight: 850; padding: 7px 10px; text-transform: uppercase; }
+.roadmapList i { border: 0; border-radius: 20px; background: linear-gradient(100deg, #1479f2, #8258f6); color: #fff; font-size: 10px; font-style: normal; font-weight: 900; letter-spacing: .07em; padding: 7px 11px; white-space: nowrap; }
 .premiumSection { width: min(1180px, calc(100% - 40px)); margin: 0 auto; display: grid; grid-template-columns: 1.1fr .9fr; align-items: end; gap: 80px; padding: 120px 0; }
 .premiumBadge { display: inline-flex; border-radius: 100px; background: linear-gradient(100deg, #1479f2, #8258f6); color: #fff; font-size: 11px; font-weight: 900; letter-spacing: .1em; padding: 9px 13px; }
 .premiumSection p { margin: 0 0 27px; color: #63708a; font-size: 19px; line-height: 1.75; }
@@ -118,8 +118,8 @@
   .roadmapSection { padding-top: 85px; padding-bottom: 85px; }
   .roadmapCopy > p { margin-bottom: 0; }
   .mobileRoadmapBadge { display: inline-flex; margin-top: 24px; border: 1px solid rgba(126,175,255,.45); border-radius: 20px; background: rgba(126,175,255,.08); color: #9fc3ff; font-size: 10px; font-weight: 850; letter-spacing: .08em; padding: 8px 12px; text-transform: uppercase; }
-  .roadmapList > div { grid-template-columns: 34px 1fr; }
-  .roadmapList i { display: none; }
+  .roadmapList > div { grid-template-columns: 30px 1fr auto; gap: 12px; }
+  .roadmapList i { font-size: 9px; padding: 6px 9px; }
   .roadmapList p { font-size: 15px; }
   .premiumSection { width: min(100% - 28px, 1180px); grid-template-columns: 1fr; gap: 20px; padding: 85px 0; }
   .premiumSection p { font-size: 17px; }
