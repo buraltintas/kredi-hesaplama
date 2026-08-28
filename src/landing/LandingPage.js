@@ -52,8 +52,16 @@ const platformFeatures = [
     premium: true,
   },
   {
+    title: "Konut kredisi devir hesaplama",
+    premium: true,
+  },
+  {
     title:
       "Ticari bankacılık araçları: spot ve rotatif kredi, dönemsel ödeme ve iskonto hesaplamaları",
+    premium: false,
+  },
+  {
+    title: "Mevduat getirisi hesaplama",
     premium: false,
   },
   {

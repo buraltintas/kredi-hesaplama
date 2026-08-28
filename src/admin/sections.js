@@ -2,14 +2,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import styles from "./AdminPage.module.css";
 import {
   AsyncState,
-  Badge,
   CONTENT_STATUS_LABELS,
   CONTENT_STATUS_TONES,
   FilterChips,
   LOAN_TYPE_LABELS,
   Pager,
-  PREMIUM_LABELS,
-  PREMIUM_TONES,
   REQUEST_STATUS_LABELS,
   REQUEST_STATUS_TONES,
   RecordCard,
@@ -59,10 +56,6 @@ export function OverviewSection({ request }) {
 }
 
 function OverviewBody({ data }) {
-  const premiumRate =
-    data.users.total > 0
-      ? Math.round((data.premium.active / data.users.total) * 100)
-      : 0;
   return (
     <div className={styles.overviewStack}>
       <div className={styles.groupLabel}>Kullanıcılar</div>
@@ -75,19 +68,6 @@ function OverviewBody({ data }) {
           label="Son 7 günde aktif"
           value={formatNumber(data.users.activeLast7Days)}
         />
-      </StatGrid>
-
-      <div className={styles.groupLabel}>Premium</div>
-      <StatGrid>
-        <StatCard
-          label="Aktif premium"
-          value={formatNumber(data.premium.active)}
-          tone="success"
-          hint={`%${premiumRate} dönüşüm`}
-        />
-        <StatCard label="Yaşam boyu" value={formatNumber(data.premium.lifetime)} tone="brand" />
-        <StatCard label="Süresi dolan" value={formatNumber(data.premium.expired)} tone="danger" />
-        <StatCard label="Ücretsiz" value={formatNumber(data.premium.free)} />
       </StatGrid>
 
       <div className={styles.groupLabel}>Kredi Talepleri</div>
@@ -128,30 +108,20 @@ function OverviewBody({ data }) {
 
 // ---- Users ----------------------------------------------------------------
 
-const USER_SEGMENTS = [
-  { value: "all", label: "Tümü" },
-  { value: "premium", label: "Premium" },
-  { value: "free", label: "Ücretsiz" },
-  { value: "active", label: "Aktif" },
-  { value: "expired", label: "Süresi dolan" },
-  { value: "lifetime", label: "Yaşam boyu" },
-];
-
 export function UsersSection({ request }) {
   const [searchInput, setSearchInput] = useState("");
   const search = useDebounced(searchInput);
-  const [segment, setSegment] = useState("all");
   const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(() => setPage(1), [search, segment]);
+  useEffect(() => setPage(1), [search]);
 
   const { data, loading, error, reload } = useResource(
     () =>
       request("/v1/admin/users", {
-        params: { search, segment, page, pageSize: PAGE_SIZE, sort: "created_desc" },
+        params: { search, page, pageSize: PAGE_SIZE, sort: "created_desc" },
       }),
-    [request, search, segment, page]
+    [request, search, page]
   );
 
   return (
@@ -165,7 +135,6 @@ export function UsersSection({ request }) {
         onChange={setSearchInput}
         placeholder="Kullanıcı ara"
       />
-      <FilterChips options={USER_SEGMENTS} value={segment} onChange={setSegment} />
       <AsyncState
         loading={loading}
         error={error}
@@ -181,12 +150,6 @@ export function UsersSection({ request }) {
                   key={user.id}
                   title={user.displayName || "(isimsiz)"}
                   subtitle={user.email}
-                  badges={[
-                    {
-                      label: PREMIUM_LABELS[user.premiumState],
-                      tone: PREMIUM_TONES[user.premiumState],
-                    },
-                  ]}
                   fields={[
                     { label: "Kayıt", value: formatDate(user.createdAt) },
                     { label: "Son görülme", value: relativeDays(user.lastSeenAt) },
@@ -249,9 +212,6 @@ function UserDetailBody({ data }) {
       <div className={styles.detailIdentity}>
         <strong>{data.displayName || "(isimsiz)"}</strong>
         <span>{data.email}</span>
-        <Badge tone={PREMIUM_TONES[data.premiumState]}>
-          {PREMIUM_LABELS[data.premiumState]}
-        </Badge>
       </div>
 
       <div className={styles.detailGroup}>Özet</div>
@@ -282,18 +242,6 @@ function UserDetailBody({ data }) {
           <dt>Son görülme</dt>
           <dd>{formatDateTime(data.lastSeenAt)}</dd>
         </div>
-        <div className={styles.field}>
-          <dt>Premium bitiş</dt>
-          <dd>{data.premiumExpiresAt ? formatDateTime(data.premiumExpiresAt) : "—"}</dd>
-        </div>
-        <div className={styles.field}>
-          <dt>Premium senkron</dt>
-          <dd>{formatDateTime(data.premiumSyncedAt)}</dd>
-        </div>
-        <div className={styles.field}>
-          <dt>RevenueCat</dt>
-          <dd className={styles.mono}>{data.revenueCatUserId || "—"}</dd>
-        </div>
       </dl>
 
       {data.links.length ? (
@@ -309,7 +257,6 @@ function UserDetailBody({ data }) {
                     label: link.isActive ? "Aktif" : "Pasif",
                     tone: link.isActive ? "success" : "neutral",
                   },
-                  ...(link.stale ? [{ label: "Premium yok", tone: "danger" }] : []),
                 ]}
                 fields={[
                   { label: "Görüntülenme", value: formatNumber(link.viewCount) },
@@ -336,102 +283,25 @@ function UserDetailBody({ data }) {
   );
 }
 
-// ---- Subscriptions --------------------------------------------------------
-
-const SUBSCRIPTION_SEGMENTS = [
-  { value: "all", label: "Tümü" },
-  { value: "active", label: "Aktif" },
-  { value: "expired", label: "Süresi dolan" },
-  { value: "lifetime", label: "Yaşam boyu" },
-];
-
-export function SubscriptionsSection({ request }) {
-  const [segment, setSegment] = useState("all");
-  const [page, setPage] = useState(1);
-  useEffect(() => setPage(1), [segment]);
-
-  const { data, loading, error, reload } = useResource(
-    () =>
-      request("/v1/admin/subscriptions", {
-        params: { segment, page, pageSize: PAGE_SIZE },
-      }),
-    [request, segment, page]
-  );
-
-  return (
-    <div>
-      <SectionHeader
-        title="Premium / Abonelikler"
-        subtitle="Entitlement durumu ve son RevenueCat olayı."
-      />
-      <FilterChips options={SUBSCRIPTION_SEGMENTS} value={segment} onChange={setSegment} />
-      <AsyncState
-        loading={loading}
-        error={error}
-        onRetry={reload}
-        empty={data && data.items.length === 0}
-        emptyText="Kayıt bulunamadı."
-      >
-        {data ? (
-          <>
-            <div className={styles.recordList}>
-              {data.items.map((item) => (
-                <RecordCard
-                  key={item.userId}
-                  title={item.displayName || "(isimsiz)"}
-                  subtitle={item.email}
-                  badges={[
-                    { label: PREMIUM_LABELS[item.state], tone: PREMIUM_TONES[item.state] },
-                  ]}
-                  fields={[
-                    {
-                      label: "Bitiş",
-                      value: item.premiumExpiresAt
-                        ? formatDate(item.premiumExpiresAt)
-                        : "Yaşam boyu",
-                    },
-                    { label: "Senkron", value: formatDate(item.premiumSyncedAt) },
-                    { label: "Son olay", value: item.latestEventType || "—" },
-                    { label: "Olay tarihi", value: formatDate(item.latestEventAt) },
-                  ]}
-                />
-              ))}
-            </div>
-            <Pager page={page} pageSize={PAGE_SIZE} total={data.total} onPage={setPage} />
-          </>
-        ) : null}
-      </AsyncState>
-    </div>
-  );
-}
-
 // ---- Request links --------------------------------------------------------
 
-const LINK_FILTERS = [
-  { value: "all", label: "Tümü" },
-  { value: "stale", label: "Premium yok · aktif" },
-];
-
 export function RequestLinksSection({ request }) {
-  const [filter, setFilter] = useState("all");
   const [page, setPage] = useState(1);
-  useEffect(() => setPage(1), [filter]);
 
   const { data, loading, error, reload } = useResource(
     () =>
       request("/v1/admin/request-links", {
-        params: { stale: filter === "stale" ? "true" : "", page, pageSize: PAGE_SIZE },
+        params: { page, pageSize: PAGE_SIZE },
       }),
-    [request, filter, page]
+    [request, page]
   );
 
   return (
     <div>
       <SectionHeader
         title="Talep Linkleri"
-        subtitle="En çok talep alan linkler önce. Sahibinin premium erişimi sona erdiği hâlde aktif kalan linkler işaretlenir."
+        subtitle="En çok talep alan linkler önce."
       />
-      <FilterChips options={LINK_FILTERS} value={filter} onChange={setFilter} />
       <AsyncState
         loading={loading}
         error={error}
@@ -452,7 +322,6 @@ export function RequestLinksSection({ request }) {
                       label: link.isActive ? "Aktif" : "Pasif",
                       tone: link.isActive ? "success" : "neutral",
                     },
-                    ...(link.stale ? [{ label: "Premium yok", tone: "danger" }] : []),
                   ]}
                   fields={[
                     { label: "Görüntülenme", value: formatNumber(link.viewCount) },
@@ -853,7 +722,6 @@ export function NotificationsSection({ request }) {
 export const SECTION_COMPONENTS = {
   overview: OverviewSection,
   users: UsersSection,
-  subscriptions: SubscriptionsSection,
   "request-links": RequestLinksSection,
   "loan-requests": LoanRequestsSection,
   social: SocialSection,
@@ -868,7 +736,6 @@ export function useSectionList() {
     () => [
       { key: "overview", label: "Genel Bakış", icon: "◧" },
       { key: "users", label: "Kullanıcılar", icon: "◉" },
-      { key: "subscriptions", label: "Premium", icon: "★" },
       { key: "request-links", label: "Talep Linkleri", icon: "🔗" },
       { key: "loan-requests", label: "Krediler", icon: "₺" },
       { key: "social", label: "Öğle Arası", icon: "◍" },

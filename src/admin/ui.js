@@ -53,20 +53,6 @@ export const relativeDays = (value) => {
   return `${Math.floor(months / 12)} yıl önce`;
 };
 
-export const PREMIUM_LABELS = {
-  free: "Ücretsiz",
-  active: "Premium",
-  lifetime: "Yaşam boyu",
-  expired: "Süresi doldu",
-};
-
-export const PREMIUM_TONES = {
-  free: "neutral",
-  active: "success",
-  lifetime: "brand",
-  expired: "danger",
-};
-
 export const LOAN_TYPE_LABELS = {
   consumer: "İhtiyaç",
   vehicle: "Taşıt",
