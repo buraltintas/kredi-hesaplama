@@ -1,4 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import trLabels from "react-phone-number-input/locale/tr";
+import "react-phone-number-input/style.css";
 import styles from "./RequestPage.module.css";
 
 const API_URL = (process.env.REACT_APP_BANKACI_API_URL || "https://api.bankaci.app").replace(/\/$/, "");
@@ -9,17 +12,22 @@ const loanTypes = [
 ];
 
 const digits = (value) => value.replace(/\D/g, "");
-// Keep only the characters a phone number can hold — digits, spaces, and the
-// grouping symbols + ( ) - — so letters and other stray input never reach the
-// field. Mirrors the charset the backend accepts when it normalises the number.
-const sanitizePhone = (value) => value.replace(/[^\d\s+()-]/g, "");
 // The amount is stored as raw digits ("200000") so it survives the backend's
 // ParseFloat unchanged; this only groups it for display ("200.000"). A dot is
 // the Turkish thousands separator, never a decimal, so it is display-only and
 // never reaches the stored value or the request body.
 const groupThousands = (raw) =>
   raw ? raw.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
-const whatsappUrl = (phone) => `https://wa.me/${digits(phone)}`;
+const whatsappNumber = (phone) => {
+  const normalized = phone.trim();
+  const number = digits(normalized);
+  if (normalized.startsWith("+")) return number;
+  if (number.startsWith("00")) return number.slice(2);
+  if (number.startsWith("0") && number.length === 11) return `90${number.slice(1)}`;
+  if (number.length === 10) return `90${number}`;
+  return number;
+};
+const whatsappUrl = (phone) => `https://wa.me/${whatsappNumber(phone)}`;
 
 function LoanTypeSelect({ value, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -153,6 +161,7 @@ function RequestPage({ requestId }) {
   const submit = async (event) => {
     event.preventDefault();
     setError("");
+    if (!form.phone || !isValidPhoneNumber(form.phone)) { setError("Geçerli bir telefon numarası yazın."); return; }
     if (!form.consent) { setError("Talebinizi iletmek için veri aktarım onayını işaretleyin."); return; }
     setBusy(true);
     try {
@@ -196,7 +205,7 @@ function RequestPage({ requestId }) {
     <form className={styles.form} onSubmit={submit}>
       <div className={styles.notice}><strong>Bilgilendirme</strong><p>Bu formdaki iletişim ve talep bilgileriniz yukarıda bilgileri bulunan kişiye iletilir. Talebi alan kişi sizinle talebiniz hakkında iletişime geçebilir ve bağımsız veri sorumlusu olarak hareket eder.</p></div>
       <label>Ad soyad<input required minLength="2" maxLength="120" autoComplete="name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} /></label>
-      <div className={styles.grid}><label>Telefon<input required inputMode="tel" autoComplete="tel" value={form.phone} onChange={(e) => update("phone", sanitizePhone(e.target.value))} /></label><label>E-posta <small>(isteğe bağlı)</small><input type="email" autoComplete="email" value={form.email} onChange={(e) => update("email", e.target.value)} /></label></div>
+      <div className={styles.grid}><label>Telefon<PhoneInput className={styles.phoneInput} defaultCountry="TR" international labels={trLabels} limitMaxLength countryCallingCodeEditable={false} autoComplete="tel" value={form.phone || undefined} onChange={(value) => update("phone", value || "")} /></label><label>E-posta <small>(isteğe bağlı)</small><input type="email" autoComplete="email" value={form.email} onChange={(e) => update("email", e.target.value)} /></label></div>
       <div className={styles.field}><span className={styles.fieldLabel} id="loan-type-label">Kredi türü</span><LoanTypeSelect value={form.loanType} onChange={(value) => update("loanType", value)} /></div>
       <div className={styles.grid}><label>Talep edilen tutar (TL)<input required inputMode="numeric" autoComplete="off" value={groupThousands(form.amount)} onChange={(e) => update("amount", digits(e.target.value).slice(0, 10))} /></label><label>Vade (ay)<input required min="1" max="360" type="number" inputMode="numeric" value={form.termMonths} onChange={(e) => update("termMonths", e.target.value)} /></label></div>
       <label>Not <small>(isteğe bağlı)</small><textarea maxLength="2000" rows="4" value={form.notes} onChange={(e) => update("notes", e.target.value)} /></label>
