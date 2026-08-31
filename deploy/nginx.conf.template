@@ -41,7 +41,7 @@ server {
 
     # Keep the existing store/legal privacy document independent from the SPA.
     location = /privacy {
-        return 308 /privacy/;
+        return 308 https://$host/privacy/;
     }
     
     location /privacy/ {
