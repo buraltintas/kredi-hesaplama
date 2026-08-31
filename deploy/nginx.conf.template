@@ -40,6 +40,10 @@ server {
     }
 
     # Keep the existing store/legal privacy document independent from the SPA.
+    location = /privacy {
+        return 308 /privacy/;
+    }
+    
     location /privacy/ {
         try_files $uri $uri/ /privacy/index.html =404;
     }
