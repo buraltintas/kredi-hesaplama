@@ -603,6 +603,46 @@ const CALC_TYPE_LABELS = {
 
 const calcTypeLabel = (type) => CALC_TYPE_LABELS[type] || type;
 
+// Human-readable variant names, matching the mobile app's own labels. The raw
+// variant string stays in the database/API; this only formats it for display.
+const LOAN_DOC_LABELS = {
+  consumer_vehicle: "İhtiyaç/Taşıt",
+  housing: "Konut",
+  custom: "Özel",
+};
+const LOAN_PLAN_LABELS = {
+  standard: "Standart Sabit Taksitli",
+  prepaidInterest: "Peşin Faiz Ödemeli",
+  equalPrincipal: "Eşit Anapara Ödemeli",
+  customPayment: "Özel / Balon Ödeme Planı",
+  interestOnly: "Anapara Ödemesiz Dönemli Plan",
+  increasingInstallment: "Artan Taksitli Plan",
+  decreasingInstallment: "Azalan Taksitli Plan",
+};
+const COMMERCIAL_LABELS = {
+  commercial_installment: "Taksitli Ticari Kredi",
+  commercial_spot: "Spot Kredi",
+  commercial_revolving: "Rotatif / BCH",
+  commercial_discount: "Çek / Senet İskonto",
+};
+const DEPOSIT_LABELS = { term_deposit: "Vadeli Mevduat" };
+const TRANSFER_LABELS = {
+  payoff: "Kapama tutarını biliyorum",
+  estimate: "Tahmini hesapla",
+};
+
+const variantLabel = (type, variant) => {
+  if (!variant) return "(varyantsız)";
+  if (COMMERCIAL_LABELS[variant]) return COMMERCIAL_LABELS[variant];
+  if (type === "deposit") return DEPOSIT_LABELS[variant] || variant;
+  if (type === "transfer") return TRANSFER_LABELS[variant] || variant;
+  if (type === "loan" && variant.includes("/")) {
+    const [doc, plan] = variant.split("/");
+    return `${LOAN_DOC_LABELS[doc] || doc} · ${LOAN_PLAN_LABELS[plan] || plan}`;
+  }
+  return variant;
+};
+
 // Term unit differs by calculator: deposits are in days, loans/transfers in
 // months. Anything null renders as an em dash.
 const termLabel = (type, value) => {
@@ -669,7 +709,7 @@ export function CalculationsSection({ request }) {
                 {data.top.map((row, index) => (
                   <RecordCard
                     key={`${row.calculatorType}-${row.variant}-${index}`}
-                    title={`${index + 1}. ${row.variant || "(varyantsız)"}`}
+                    title={`${index + 1}. ${variantLabel(row.calculatorType, row.variant)}`}
                     subtitle={calcTypeLabel(row.calculatorType)}
                     badges={[{ label: formatNumber(row.total), tone: "brand" }]}
                     fields={[
@@ -726,7 +766,7 @@ function RecentCalculations({ request }) {
         return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
       };
       const header = [
-        "Tarih", "Tur", "Varyant", "Tutar", "Vade", "Faiz(%)",
+        "Tarih", "Tur", "Varyant", "Aciklama", "Tutar", "Vade", "Faiz(%)",
         "Sonuc(Toplam)", "Taksit", "Platform", "Surum",
       ];
       const lines = [header.join(";")];
@@ -736,6 +776,7 @@ function RecentCalculations({ request }) {
             new Date(e.createdAt).toLocaleString("tr-TR"),
             calcTypeLabel(e.calculatorType),
             e.variant,
+            variantLabel(e.calculatorType, e.variant),
             e.principal ?? "",
             e.term ?? "",
             e.rate ?? "",
@@ -794,7 +835,7 @@ function RecentCalculations({ request }) {
               {data.items.map((e, index) => (
                 <RecordCard
                   key={`${e.createdAt}-${index}`}
-                  title={e.variant || "(varyantsız)"}
+                  title={variantLabel(e.calculatorType, e.variant)}
                   subtitle={`${calcTypeLabel(e.calculatorType)} · ${e.platform}`}
                   fields={[
                     { label: "Tutar", value: avgMoney(e.principal) },
