@@ -671,7 +671,7 @@ export function CalculationsSection({ request }) {
         subtitle="Anonim hesaplama olayları. Kimlik içermez; sadece hesaplama rakamları."
       />
       <div className={styles.noticeCard}>
-        Bu hesaplamalar 2 Eylül 2026, saat 15:55 itibarıyla raporlanmaya
+        Bu hesaplamalar 2 Eylül 2026, saat 13:55 itibarıyla raporlanmaya
         başlanmıştır. Daha önceki hesaplamalar kaydedilmemiştir.
       </div>
       <AsyncState loading={loading} error={error} onRetry={reload}>
