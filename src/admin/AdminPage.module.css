@@ -214,6 +214,18 @@
   max-width: 620px;
 }
 
+.noticeCard {
+  margin: 0 0 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand);
+  border-radius: 10px;
+  background: var(--brand-soft);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px 14px;
+}
+
 /* ---- Stat cards -------------------------------------------------------- */
 
 .overviewStack {
