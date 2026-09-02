@@ -593,6 +593,87 @@ export function PushDevicesSection({ request }) {
   );
 }
 
+// ---- Calculations ---------------------------------------------------------
+
+const CALC_TYPE_LABELS = {
+  loan: "Kredi",
+  deposit: "Mevduat",
+  transfer: "Konut Devri",
+};
+
+const calcTypeLabel = (type) => CALC_TYPE_LABELS[type] || type;
+
+export function CalculationsSection({ request }) {
+  const { data, loading, error, reload } = useResource(
+    () => request("/v1/admin/calculations"),
+    [request]
+  );
+  return (
+    <div>
+      <SectionHeader
+        title="Hesaplamalar"
+        subtitle="Anonim hesaplama olaylarından en çok yapılanlar. Kimlik içermez."
+      />
+      <AsyncState loading={loading} error={error} onRetry={reload}>
+        {data ? (
+          <>
+            <StatGrid>
+              <StatCard label="Toplam hesaplama" value={formatNumber(data.totals.total)} />
+              <StatCard label="Bugün" value={formatNumber(data.totals.today)} />
+              <StatCard label="Son 7 gün" value={formatNumber(data.totals.last7Days)} />
+              <StatCard label="Son 30 gün" value={formatNumber(data.totals.last30Days)} />
+              <StatCard label="iOS" value={formatNumber(data.totals.ios)} />
+              <StatCard label="Android" value={formatNumber(data.totals.android)} />
+              <StatCard label="Kurulum (tekil)" value={formatNumber(data.totals.installations)} />
+            </StatGrid>
+
+            {data.byType.length ? (
+              <>
+                <div className={styles.groupLabel}>Türe göre</div>
+                <StatGrid>
+                  {data.byType.map((row) => (
+                    <StatCard
+                      key={row.calculatorType}
+                      label={calcTypeLabel(row.calculatorType)}
+                      value={formatNumber(row.total)}
+                      hint={`${formatNumber(row.installations)} kurulum`}
+                    />
+                  ))}
+                </StatGrid>
+              </>
+            ) : null}
+
+            <div className={styles.groupLabel}>En çok yapılan</div>
+            {data.top.length === 0 ? (
+              <div className={styles.recordList}>
+                <RecordCard title="Kayıt yok" subtitle="Henüz hesaplama olayı yok." />
+              </div>
+            ) : (
+              <div className={styles.recordList}>
+                {data.top.map((row, index) => (
+                  <RecordCard
+                    key={`${row.calculatorType}-${row.variant}-${index}`}
+                    title={`${index + 1}. ${row.variant || "(varyantsız)"}`}
+                    subtitle={calcTypeLabel(row.calculatorType)}
+                    badges={[{ label: formatNumber(row.total), tone: "brand" }]}
+                    fields={[
+                      { label: "Toplam", value: formatNumber(row.total) },
+                      { label: "iOS", value: formatNumber(row.ios) },
+                      { label: "Android", value: formatNumber(row.android) },
+                      { label: "Kurulum", value: formatNumber(row.installations) },
+                      { label: "Son 7 gün", value: formatNumber(row.last7Days) },
+                    ]}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : null}
+      </AsyncState>
+    </div>
+  );
+}
+
 // ---- Notification preferences --------------------------------------------
 
 export function PreferencesSection({ request }) {
@@ -726,6 +807,7 @@ export const SECTION_COMPONENTS = {
   "loan-requests": LoanRequestsSection,
   social: SocialSection,
   "push-devices": PushDevicesSection,
+  calculations: CalculationsSection,
   preferences: PreferencesSection,
   notifications: NotificationsSection,
 };
@@ -740,6 +822,7 @@ export function useSectionList() {
       { key: "loan-requests", label: "Krediler", icon: "₺" },
       { key: "social", label: "Öğle Arası", icon: "◍" },
       { key: "push-devices", label: "Cihazlar", icon: "▤" },
+      { key: "calculations", label: "Hesaplamalar", icon: "∑" },
       { key: "preferences", label: "Tercihler", icon: "⚙" },
       { key: "notifications", label: "Bildirimler", icon: "✦" },
     ],
