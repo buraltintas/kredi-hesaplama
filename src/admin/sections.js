@@ -603,6 +603,22 @@ const CALC_TYPE_LABELS = {
 
 const calcTypeLabel = (type) => CALC_TYPE_LABELS[type] || type;
 
+// Term unit differs by calculator: deposits are in days, loans/transfers in
+// months. Anything null renders as an em dash.
+const termLabel = (type, value) => {
+  if (value === null || value === undefined) return "—";
+  const unit = type === "deposit" ? "gün" : "ay";
+  return `${Number(value).toLocaleString("tr-TR")} ${unit}`;
+};
+
+const rateLabel = (value) =>
+  value === null || value === undefined
+    ? "—"
+    : `%${Number(value).toLocaleString("tr-TR")}`;
+
+const avgMoney = (value) =>
+  value === null || value === undefined ? "—" : formatCurrency(Number(value));
+
 export function CalculationsSection({ request }) {
   const { data, loading, error, reload } = useResource(
     () => request("/v1/admin/calculations"),
@@ -612,7 +628,7 @@ export function CalculationsSection({ request }) {
     <div>
       <SectionHeader
         title="Hesaplamalar"
-        subtitle="Anonim hesaplama olaylarından en çok yapılanlar. Kimlik içermez."
+        subtitle="Anonim hesaplama olayları. Kimlik içermez; sadece hesaplama rakamları."
       />
       <AsyncState loading={loading} error={error} onRetry={reload}>
         {data ? (
@@ -624,7 +640,7 @@ export function CalculationsSection({ request }) {
               <StatCard label="Son 30 gün" value={formatNumber(data.totals.last30Days)} />
               <StatCard label="iOS" value={formatNumber(data.totals.ios)} />
               <StatCard label="Android" value={formatNumber(data.totals.android)} />
-              <StatCard label="Kurulum (tekil)" value={formatNumber(data.totals.installations)} />
+              <StatCard label="Cihaz (tekil)" value={formatNumber(data.totals.installations)} />
             </StatGrid>
 
             {data.byType.length ? (
@@ -636,14 +652,14 @@ export function CalculationsSection({ request }) {
                       key={row.calculatorType}
                       label={calcTypeLabel(row.calculatorType)}
                       value={formatNumber(row.total)}
-                      hint={`${formatNumber(row.installations)} kurulum`}
+                      hint={`${formatNumber(row.installations)} cihaz`}
                     />
                   ))}
                 </StatGrid>
               </>
             ) : null}
 
-            <div className={styles.groupLabel}>En çok yapılan</div>
+            <div className={styles.groupLabel}>En çok yapılan (ortalamalarla)</div>
             {data.top.length === 0 ? (
               <div className={styles.recordList}>
                 <RecordCard title="Kayıt yok" subtitle="Henüz hesaplama olayı yok." />
@@ -660,17 +676,141 @@ export function CalculationsSection({ request }) {
                       { label: "Toplam", value: formatNumber(row.total) },
                       { label: "iOS", value: formatNumber(row.ios) },
                       { label: "Android", value: formatNumber(row.android) },
-                      { label: "Kurulum", value: formatNumber(row.installations) },
-                      { label: "Son 7 gün", value: formatNumber(row.last7Days) },
+                      { label: "Cihaz", value: formatNumber(row.installations) },
+                      { label: "Ort. tutar", value: avgMoney(row.avgPrincipal) },
+                      {
+                        label: "Ort. vade",
+                        value: termLabel(row.calculatorType, row.avgTerm),
+                      },
+                      { label: "Ort. faiz", value: rateLabel(row.avgRate) },
+                      { label: "Ort. sonuç", value: avgMoney(row.avgResultTotal) },
                     ]}
                   />
                 ))}
               </div>
             )}
+
+            <RecentCalculations request={request} />
           </>
         ) : null}
       </AsyncState>
     </div>
+  );
+}
+
+// RecentCalculations is the paginated per-event list plus a CSV export of every
+// event (all pages), which opens directly in Excel.
+function RecentCalculations({ request }) {
+  const [page, setPage] = useState(1);
+  const [exporting, setExporting] = useState(false);
+  const { data, loading, error, reload } = useResource(
+    () => request("/v1/admin/calculation-events", { params: { page, pageSize: PAGE_SIZE } }),
+    [request, page]
+  );
+
+  const exportCsv = async () => {
+    setExporting(true);
+    try {
+      const all = [];
+      let p = 1;
+      // Page through everything (max page size) and accumulate.
+      for (; p <= 1000; p += 1) {
+        const res = await request("/v1/admin/calculation-events", {
+          params: { page: p, pageSize: 100 },
+        });
+        all.push(...res.items);
+        if (res.items.length === 0 || p * 100 >= res.total) break;
+      }
+      const esc = (value) => {
+        const s = value === null || value === undefined ? "" : String(value);
+        return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+      const header = [
+        "Tarih", "Tur", "Varyant", "Tutar", "Vade", "Faiz(%)",
+        "Sonuc(Toplam)", "Taksit", "Platform", "Surum",
+      ];
+      const lines = [header.join(";")];
+      for (const e of all) {
+        lines.push(
+          [
+            new Date(e.createdAt).toLocaleString("tr-TR"),
+            calcTypeLabel(e.calculatorType),
+            e.variant,
+            e.principal ?? "",
+            e.term ?? "",
+            e.rate ?? "",
+            e.resultTotal ?? "",
+            e.resultPayment ?? "",
+            e.platform,
+            e.appVersion,
+          ]
+            .map(esc)
+            .join(";")
+        );
+      }
+      // BOM so Excel reads UTF-8 (Turkish characters) correctly.
+      const csv = "﻿" + lines.join("\r\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `hesaplamalar-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  return (
+    <>
+      <div className={styles.sectionHeader} style={{ marginTop: 22 }}>
+        <div>
+          <div className={styles.groupLabel} style={{ marginTop: 0 }}>
+            Son hesaplamalar
+          </div>
+        </div>
+        <button
+          type="button"
+          className={styles.retryButton}
+          disabled={exporting || !data || data.total === 0}
+          onClick={() => void exportCsv()}
+        >
+          {exporting ? "Hazırlanıyor…" : "Excel'e aktar (tümü)"}
+        </button>
+      </div>
+      <AsyncState
+        loading={loading}
+        error={error}
+        onRetry={reload}
+        empty={data && data.items.length === 0}
+        emptyText="Henüz hesaplama olayı yok."
+      >
+        {data ? (
+          <>
+            <div className={styles.recordList}>
+              {data.items.map((e, index) => (
+                <RecordCard
+                  key={`${e.createdAt}-${index}`}
+                  title={e.variant || "(varyantsız)"}
+                  subtitle={`${calcTypeLabel(e.calculatorType)} · ${e.platform}`}
+                  fields={[
+                    { label: "Tutar", value: avgMoney(e.principal) },
+                    { label: "Vade", value: termLabel(e.calculatorType, e.term) },
+                    { label: "Faiz", value: rateLabel(e.rate) },
+                    { label: "Sonuç", value: avgMoney(e.resultTotal) },
+                    { label: "Tarih", value: formatDateTime(e.createdAt) },
+                  ]}
+                />
+              ))}
+            </div>
+            <Pager page={page} pageSize={PAGE_SIZE} total={data.total} onPage={setPage} />
+          </>
+        ) : null}
+      </AsyncState>
+    </>
   );
 }
 
