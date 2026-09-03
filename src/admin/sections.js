@@ -776,7 +776,7 @@ function RecentCalculations({ request }) {
       for (const e of all) {
         lines.push(
           [
-            new Date(e.occurredAt).toLocaleString("tr-TR"),
+            new Date(e.occurredAt || e.createdAt).toLocaleString("tr-TR"),
             calcTypeLabel(e.calculatorType),
             e.variant,
             variantLabel(e.calculatorType, e.variant),
@@ -837,7 +837,7 @@ function RecentCalculations({ request }) {
             <div className={styles.recordList}>
               {data.items.map((e, index) => (
                 <RecordCard
-                  key={`${e.occurredAt}-${index}`}
+                  key={`${e.occurredAt || e.createdAt}-${index}`}
                   title={variantLabel(e.calculatorType, e.variant)}
                   subtitle={`${calcTypeLabel(e.calculatorType)} · ${e.platform}`}
                   fields={[
@@ -845,7 +845,7 @@ function RecentCalculations({ request }) {
                     { label: "Vade", value: termLabel(e.calculatorType, e.term) },
                     { label: "Faiz", value: rateLabel(e.rate) },
                     { label: "Sonuç", value: avgMoney(e.resultTotal) },
-                    { label: "Tarih", value: formatDateTime(e.occurredAt) },
+                    { label: "Tarih", value: formatDateTime(e.occurredAt || e.createdAt) },
                   ]}
                 />
               ))}
