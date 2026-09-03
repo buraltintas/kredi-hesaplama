@@ -695,7 +695,6 @@ export function CalculationsSection({ request }) {
                       key={row.calculatorType}
                       label={calcTypeLabel(row.calculatorType)}
                       value={formatNumber(row.total)}
-                      hint={`${formatNumber(row.installations)} cihaz`}
                     />
                   ))}
                 </StatGrid>
@@ -719,7 +718,6 @@ export function CalculationsSection({ request }) {
                       { label: "Toplam", value: formatNumber(row.total) },
                       { label: "iOS", value: formatNumber(row.ios) },
                       { label: "Android", value: formatNumber(row.android) },
-                      { label: "Cihaz", value: formatNumber(row.installations) },
                       { label: "Ort. tutar", value: avgMoney(row.avgPrincipal) },
                       {
                         label: "Ort. vade",
