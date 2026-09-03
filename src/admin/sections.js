@@ -682,13 +682,8 @@ export function CalculationsSection({ request }) {
               <StatCard label="Bugün" value={formatNumber(data.totals.today)} />
               <StatCard label="Son 7 gün" value={formatNumber(data.totals.last7Days)} />
               <StatCard label="Son 30 gün" value={formatNumber(data.totals.last30Days)} />
-              <StatCard label="iOS" value={formatNumber(data.totals.ios)} hint="hesaplama" />
-              <StatCard label="Android" value={formatNumber(data.totals.android)} hint="hesaplama" />
-              <StatCard
-                label="Farklı cihaz"
-                value={formatNumber(data.totals.installations)}
-                hint="hesaplama yapan"
-              />
+              <StatCard label="iOS" value={formatNumber(data.totals.ios)} />
+              <StatCard label="Android" value={formatNumber(data.totals.android)} />
             </StatGrid>
 
             {data.byType.length ? (
