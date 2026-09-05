@@ -102,6 +102,29 @@ function OverviewBody({ data }) {
         <StatCard label="Üye cihaz" value={formatNumber(data.pushDevices.members)} />
         <StatCard label="Misafir cihaz" value={formatNumber(data.pushDevices.guest)} />
       </StatGrid>
+
+      {data.subscriptions ? (
+        <>
+          <div className={styles.groupLabel}>Abonelik</div>
+          <StatGrid>
+            <StatCard
+              label="Premium"
+              value={formatNumber(data.subscriptions.premium)}
+              hint={
+                data.subscriptions.source === "revenuecat"
+                  ? "RevenueCat (canlı)"
+                  : "yerel kayıt (RevenueCat alınamadı)"
+              }
+              tone="success"
+            />
+            <StatCard
+              label="Yerel kayıt (is_premium)"
+              value={formatNumber(data.subscriptions.local)}
+              hint="RevenueCat ile karşılaştırma"
+            />
+          </StatGrid>
+        </>
+      ) : null}
     </div>
   );
 }
